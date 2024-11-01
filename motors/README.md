@@ -14,6 +14,13 @@ pip3 install RPi.GPIO
 ![Schematic](./sketch.png)
 This is an example view, not strictly needed. You can use the pins as you wish. The showed layout is already declared as default.
 
+- ENA -> 32 (GPIO12)
+- IN1 -> 35 (GPIO19)
+- IN2 -> 37 (GPIO26)
+- ENB -> 40 (GPIO21)
+- IN3 -> 36 (GPIO16)
+- IN4 -> 38 (GPIO20)
+
 The class __MovementController__ declared in _movements.py_ sets the pins, in case you chose other, specify them to the constructor: 
 ```python 
 def __init__(self,
