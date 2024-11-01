@@ -73,7 +73,7 @@ class MovementController:
                 print(e)
             return False
         
-    def setOutput(pins: List[int], states: List[bool]) -> bool:
+    def setOutput(self, pins: List[int], states: List[bool]) -> bool:
         """Sets output of provided pins according to a state List corresponding to each pin
 
         Args:
