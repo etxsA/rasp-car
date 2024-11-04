@@ -9,6 +9,7 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 rasp-car
+__pycache__
 
 # From Docker gitignore
 .vagrant*
