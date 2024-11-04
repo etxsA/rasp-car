@@ -2,9 +2,9 @@
 # main.py
 
 from fastapi import FastAPI
-from . import models
-from .routers import photoresistor, accelerometer, distance, pressure
-from .database import engine, get_db
+from app import models
+from app.routers import photoresistor, accelerometer, distance, pressure
+from app.database import engine
 
 app = FastAPI()
 
