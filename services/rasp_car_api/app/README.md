@@ -48,12 +48,13 @@ uvicorn main:app --reload
 ```
 
 ## File Structure
-- **`📂 rasp_car_api/`**: Folder containing the FastAPI application code.
+- **`📂 app/`**: Folder containing the FastAPI application code.
   - **`📄 main.py`**: Entry point
   - **`📄 database.py`**: Database connection and setup using SQLAlchemy.
   - **`📄 models.py`**: SQLAlchemy models that define database tables.
   - **`📄 schemas.py`**: Pydantic schemas for validating request and response data.
   - **`📄 crud.py`**: CRUD controlleres definition
+
 
 ## CRUD Operations
 There is a part, where all the available operations are defined, in accordance with the models create from the schemas. 
@@ -66,4 +67,8 @@ The operations where created as follows:
 - Delete Functions (delete_*): Deletes a record by id and commits the transaction.
 
 There was no adition of update functions, because there is no need to update the entries of the database. 
+
+## API Endpoints
+
+... 
 

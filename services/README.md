@@ -5,7 +5,7 @@ The second service is the fastapi, an implementation in python that serves as a 
 
 ## Folder Structure
 - **`📂 services/`**: Container for all services
-  -  [**`📂 rasp_car_api/`**:](/services//rasp_car_api/)
+  -  [**`📂 rasp_car_api/`**:](/services//rasp_car_api/app)
   Implementation of a fastapi, using sqlalchemy to interact with the MySQL Database. Simple rest api. 
   - [**`📂 mysql/`**:](/services/mysql/)
       Database Scheme, and instructions to replicate it, also it's included a docker file to test it locally. 

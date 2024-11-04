@@ -19,7 +19,7 @@ class Photoresistor(PhotoresistorBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # 2. Accelerometer Schemas
 class AccelerometerBase(BaseModel):
@@ -36,7 +36,7 @@ class Accelerometer(AccelerometerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # 3. Distance Schemas
 class DistanceBase(BaseModel):
@@ -50,7 +50,7 @@ class Distance(DistanceBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # 4. Pressure Schemas
 class PressureBase(BaseModel):
@@ -66,4 +66,4 @@ class Pressure(PressureBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
