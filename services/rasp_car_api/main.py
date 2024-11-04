@@ -4,6 +4,7 @@
 from fastapi import FastAPI
 from . import models
 from .routers import users
+from .database import engine, get_db
 
 app = FastAPI()
 
