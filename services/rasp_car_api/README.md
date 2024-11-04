@@ -25,8 +25,21 @@ There is the use of environment varibles for the Database Server URL, in case it
 > [!TIP]
 > Create an .env file, the variable should be named DATABASE_URL
 
+## Running the API
+
+To run the API simply use uvicorn as follows: 
+
+```bash
+uvicorn main:app
+```
 
 ## File Structure
+- **`📂 rasp_car_api/`**: Folder containing the FastAPI application code.
+  - **`📄 main.py`**: Entry point
+  - **`📄 database.py`**: Database connection and setup using SQLAlchemy.
+  - **`📄 models.py`**: SQLAlchemy models that define database tables.
+  - **`📄 schemas.py`**: Pydantic schemas for validating request and response data.
+  - **`📄 crud.py`**: CRUD controlleres definition
 
 
 
