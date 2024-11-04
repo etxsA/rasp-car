@@ -30,7 +30,7 @@ There is the use of environment varibles for the Database Server URL, in case it
 To run the API simply use uvicorn as follows: 
 
 ```bash
-uvicorn main:app
+uvicorn main:app --reload
 ```
 
 ## File Structure

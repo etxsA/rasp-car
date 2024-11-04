@@ -7,6 +7,9 @@ The database schema is present in the [database.sql](./database.sql), it's the f
 If you want to replecate the database in another environment just use the CREATE TABLE statements provided. 
 
 ## How to build it and use it. 
+>![NOTE]
+> This docker container, should only be used for testing and developing, never in production environments.
+
 > ![TIP]
 > Before bulding, modify it as you wish ensure credentials ared specified in the other services of the project. 
 
