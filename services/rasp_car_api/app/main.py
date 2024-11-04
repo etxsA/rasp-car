@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI
 from . import models
-from .routers import users
+from .routers import photoresistor, accelerometer, distance, pressure
 from .database import engine, get_db
 
 app = FastAPI()
@@ -12,7 +12,11 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 # Include routers
-app.include_router(users.router)
+app.include_router(photoresistor.router)
+app.include_router(accelerometer.router)
+app.include_router(distance.router)
+app.include_router(pressure.router)
+
 
 @app.get("/")
 def read_root():

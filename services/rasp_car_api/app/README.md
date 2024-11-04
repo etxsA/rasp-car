@@ -3,6 +3,20 @@
 > The API can run in any system
 
 A simple fastapi implementation serving as bridge between our car and the database server. 
+
+## Table of Contents
+
+- [Code Requirements](#code-requirements)
+- [Environment Variables](#environment-variables)
+- [Database Models](#database-models)
+- [API Endpoints](#api-endpoints)
+  - [Photoresistor Endpoints](#photoresistor-endpoints)
+  - [Accelerometer Endpoints](#accelerometer-endpoints)
+  - [Distance Endpoints](#distance-endpoints)
+  - [Pressure Endpoints](#pressure-endpoints)
+
+---
+
 ## Code Requirements 
 To execute any of the code , ensure you are running on a python virtual environment (venv). If no, create one and use it from the termimal: 
 ```bash

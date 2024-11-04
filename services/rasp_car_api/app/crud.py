@@ -1,3 +1,5 @@
+# Definition of the controllers for the CRUD functionality of the api
+# main/crud.py
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 from . import models, schemas
