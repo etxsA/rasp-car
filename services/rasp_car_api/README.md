@@ -7,7 +7,7 @@ A simple fastapi implementation serving as bridge between our car and the databa
 ## Table of Contents
 
 - [Code Requirements](#code-requirements)
-- [Environment Variables](#environment-variables)
+- [Environment Variables](app/README.md#environment-variables)
 - [Database Models](#database-models)
 - [API Endpoints](#api-endpoints)
   - [Photoresistor Endpoints](#photoresistor-endpoints)
