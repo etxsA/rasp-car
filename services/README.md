@@ -3,5 +3,11 @@ The project uses 2 main services a MySQL Database for storing the sensor data, i
 
 The second service is the fastapi, an implementation in python that serves as a bridge between our car, the database, and our main aplication
 
-## Structure
-1.  [rasp_car_api](/rasp_car_api/)
+## Folder Structure
+1.  [rasp_car_api](/services//rasp_car_api/)
+
+    Implementation of a fastapi, using sqlalchemy to interact with the MySQL Database. Simple rest api. 
+
+2. [mysql](/services/mysql/)
+
+    Database Scheme, and instructions to replicate it, also it's included a docker file to test it locally. 

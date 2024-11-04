@@ -1,0 +1,1 @@
+-- Definition of the squema and some other starting things. 

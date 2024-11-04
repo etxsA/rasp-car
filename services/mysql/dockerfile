@@ -1,0 +1,14 @@
+# Last image of mysql
+FROM mysql:latest
+
+# Default Variables
+ENV MYSQL_ROOT_PASSWORD=toor123
+ENV MYSQL_DATABASE=Sensors
+ENV MYSQL_USER=raspCar
+ENV MYSQL_PASSWORD=raspCar123
+
+# Copy the database.sql file into the container's init directory
+COPY database.sql /docker-entrypoint-initdb.d/
+
+# Expose MySQL port
+EXPOSE 3306
