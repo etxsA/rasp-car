@@ -10,10 +10,6 @@ If you want to replecate the database in another environment just use the CREATE
 > ![NOTE]
 > This docker container, should only be used for testing and developing, never in production environments.
 
-
-> ![TIP]
-> Before bulding, modify it as you wish ensure credentials ared specified in the other services of the project. 
-
 __Building__ \
 To build the image ensure the configuration as you want it, specially the credentials, after that run: 
 ```bash
