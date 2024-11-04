@@ -1,9 +1,8 @@
 # Definition of the controllers for the CRUD functionality of the api
 # main/crud.py
 from sqlalchemy.orm import Session
-from datetime import datetime, timezone
-from . import models, schemas
-from models import get_utc_now
+from app import models, schemas
+from app.models import get_utc_now
 
 
 # 1. Photoresistor CRUD operations
