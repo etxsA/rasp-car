@@ -3,5 +3,5 @@ A integrated project for a raspberry car, that uses an api to save sensor data, 
 
 ## Directory
 
-1. [Car logic implementation](/car-logic/README.md)
-2. [Services, mysql, server-api, dashboard-api](/services/README.md)
+1. [Car logic implementation](/car-logic/)
+2. [Services, mysql, server-api, dashboard-api](/services/)
