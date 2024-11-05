@@ -5,6 +5,7 @@ A integrated project for a raspberry car, that uses an api to save sensor data, 
 
 1. [Car logic implementation](/car-logic/)
 2. [Services, mysql, server-api, dashboard-api](/services/)
+3. [Utilities](/utils/)
 
 
 ### Fast Setup 
