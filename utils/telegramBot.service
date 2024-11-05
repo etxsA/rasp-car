@@ -3,10 +3,10 @@ Description=Send IP address to Telegram
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/bash /home/%i/botIp.sh
+ExecStart=/usr/bin/bash /home/%user/botIp.sh
 Restart=on-failure
-User=%i
-Group=%i
+User=%user
+Group=%user
 
 [Install]
 WantedBy=multi-user.target
