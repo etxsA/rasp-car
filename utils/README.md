@@ -64,3 +64,4 @@ sudo makeBotService.sh
 ```
 
 6. Done, it should work on startup after it connects to the network.
+Also the script runs once for testing, you should receive a message on the specified chat id. 
