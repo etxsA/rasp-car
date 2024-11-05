@@ -6,4 +6,4 @@ After=network.target
 ExecStart=/usr/local/bin/botIp.sh
 Restart=on-failure
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
