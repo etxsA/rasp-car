@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cp ./botIp.sh /home/${whoami}/botIp.sh
-chmod +x /home/${whoami}/botIp.sh
-cp ./telegramBot.service /etc/systemd/system/telegramBot.service
-systemctl daemon-reload
-systemctl enable telegramBot.service
-systemctl status telegramBot.service
+sudo cp ./botIp.sh /home/$USER/botIp.sh
+sudo chmod +x /home/$USER/botIp.sh
+sudo cp ./telegramBot.service /etc/systemd/system/telegramBot.service
+sudo systemctl daemon-reload
+sudo systemctl enable telegramBot.service
+sudo systemctl status telegramBot.service
