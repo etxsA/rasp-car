@@ -1,9 +1,11 @@
 [Unit]
 Description=Send IP address to Telegram
-After=network.target
+Requires=network-online.target
+After=network-online.target
 
 [Service]
 ExecStart=/usr/local/bin/botIp.sh
+
 Restart=on-failure
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
