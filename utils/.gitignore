@@ -1,0 +1,3 @@
+# The botIp.sh template is up just once, ignore any change
+# Prevent token leaks. 
+botIp.sh
