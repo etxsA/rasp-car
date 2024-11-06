@@ -64,3 +64,13 @@ class BMP280:
         return value - 65536 if value > 32767 else value
 
     def readData(self) -> Dict[str, float]:
+
+
+        # Raw data
+        data = self.bus.read_i2c_block_data(self.address, 0xF7, 6)
+
+        adcP = data[0] << 12 | data[1] << 4 | data[2] >> 4
+        adcT = data[3] << 12 | data[4] << 4 | data[5] >> 4
+
+        # Use class priv methods to calc the different values
+        

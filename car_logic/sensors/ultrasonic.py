@@ -1,7 +1,9 @@
 # Really Simple implementation of HC-SR04
 import RPi.GPIO as GPIO
-from .. import setGPIO as sg
 import time
+
+from .. import setGPIO as sg
+from typing import Dict
 
 # Trig to GPIO 4 -> Pin 7
 # Echo to GPIO 6 -> Pin 31
@@ -57,7 +59,7 @@ class Ultrasonic:
         GPIO.output(trig, GPIO.LOW)
         time.sleep(2)  # Allow sensor to settle
 
-    def measureDistance(self) -> float:
+    def measureDistance(self) -> Dict[str, float]:
         """
         Sends a pulse from the trigger pin and measures the time taken for the
         pulse to return to the echo pin, calculating the distance based on the speed
@@ -94,7 +96,7 @@ class Ultrasonic:
         if self.p:
             print(f"Distance: {distance:.2f} cm")
 
-        return distance
+        return {"distance": distance}
 
     def __del__(self):
         """Destructor to clean up GPIO resources when the object is deleted."""
