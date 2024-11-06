@@ -32,7 +32,7 @@ class BMP280:
 
     def _readCalibrationData(self) -> Dict[str, int]:
 
-        calib = self.bus.read_i2c_bloc_data(self.address, 0x88, 24)
+        calib = self.bus.read_i2c_block_data(self.address, 0x88, 24)
 
         params = {
             'dig_T1': calib[1] << 8 | calib[0],
