@@ -99,4 +99,47 @@ class BMP280:
         tFine = var1 + var2
         temperature = (tFine * 5 + 128) >> 8
         self.tFine = tFine
-        return temperature / 100.0
+        return temperature / 100.
+    
+    def _calculatePressure(self, adcP: float) -> float:
+        """Calculation according to datasheet for pressure
+
+        Args:
+            adcP (float): Analog raw data of pressure
+
+        Returns:
+            float: Pressure in hPa
+        """
+        var1 = (self.tFine / 2.0) - 64000.0
+        var2 = var1 * var1 * self.calibrationParams['dig_P6'] / 32768.0
+        var2 = var2 + var1 * self.calibrationParams['dig_P5'] * 2.0
+        var2 = (var2 / 4.0) + (self.calibrationParams['dig_P4'] * 65536.0)
+        var1 = (self.calibrationParams['dig_P3'] * var1 * var1 / 524288.0 +
+                self.calibrationParams['dig_P2'] * var1) / 524288.0
+        var1 = (1.0 + var1 / 32768.0) * self.calibrationParams['dig_P1']
+        if var1 == 0:
+            return 0  # Avoid division by zero
+        pressure = 1048576.0 - adcP
+        pressure = ((pressure - var2 / 4096.0) * 6250.0) / var1
+        var1 = self.calibrationParams['dig_P9'] * pressure * pressure / 2147483648.0
+        var2 = pressure * self.calibrationParams['dig_P8'] / 32768.0
+        pressure = pressure + (var1 + var2 + self.calibrationParams['dig_P7']) / 16.0
+        
+        return pressure / 100.0  # Convert to hPa
+    
+    def _calculateAltitude(self, pressure: float) -> float:
+        """Calculate altitude based on the pressure provided
+
+        Args:
+            pressure (float): Pressure in hPa
+
+        Returns:
+            float: Current altitude
+        """
+        altitude = 44330.0 * (1.0 - (pressure / self.seaLevelPressure) ** (1/5.255))
+        return altitude
+    
+    def __del__(self):
+        """Just close the bus when destructed
+        """
+        self.bus.close()
