@@ -1,5 +1,5 @@
 import time
-from motors import MovementController
+from . import MovementController
 
 def display_menu():
     print("\nMovement Controller Menu:")
