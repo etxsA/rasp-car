@@ -1,1 +1,1 @@
-from car_logic import main
+from . import main
