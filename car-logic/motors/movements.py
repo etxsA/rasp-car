@@ -2,7 +2,7 @@ from typing import List
 from time import sleep
 
 import RPi.GPIO as GPIO
-import setGPIO as sg
+from . import setGpio as sg
 
 class MovementController:
 
