@@ -53,10 +53,11 @@ Moving Foward
 To prevent the behaviour, when creating an object of the controller, set the default parameter __p to False__
 
 ## Testing 
-Follow any previous setup and run the _test.py_ script
+Follow any previous setup and run the _test.py_ module, if you wan to run it, you have to get back to the rasp-car main folder.
 
 ```bash
-> python test.py
+cd ../..
+python -m car_logic.motors.test
 ```
 
 
