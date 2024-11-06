@@ -1,4 +1,4 @@
-from sensors import Ultrasonic
+from .sensors import Ultrasonic
 
 test = Ultrasonic(p = True)
 
