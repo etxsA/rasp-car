@@ -20,4 +20,4 @@ app.include_router(pressure.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Modular FastAPI application!"}
+    return {"message": "Welcome to the FastApi for rasp-car project!"}

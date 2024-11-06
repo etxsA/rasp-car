@@ -1,6 +1,8 @@
-import RPi.GPIO as GPIO
 from typing import List
 from time import sleep
+
+import RPi.GPIO as GPIO
+import setGPIO as sg
 
 class MovementController:
 
@@ -26,8 +28,8 @@ class MovementController:
         self.p: bool = p
         self.pins: List[int] = [ENA, IN1, IN2, ENB, IN3, IN4]; 
 
-        self.setGPIOmode()
-        if(self.setPinsAsOut(self.pins)):
+        sg.setGPIOmode(self.p)
+        if(sg.setPinsAsOut(self.pins, self.p)):
             if(self.p):
                 print("Movement Controller Created Successfully")
         else :
@@ -39,69 +41,13 @@ class MovementController:
         # Just make GPIO CleanUp
         GPIO.cleanup()
 
-    def setGPIOmode(self) -> None:
-        """Function ensures GPIO.BOARD mode is set.
-        """
-        current_mode = GPIO.getmode()
-        
-        if(current_mode == GPIO.BOARD):
-            if(self.p):
-                print("BOARD mode already set")
-            return
-        else:
-            if(self.p):
-                print("Other GPIO mode set previously, setting it to BOARD")
-            GPIO.setmode(GPIO.BOARD)
-    
-    def setPinsAsOut(self, pins: List[int]) -> bool:
-        """Sets pins in list to work in output mode.
-
-        Args:
-            pins (List[int]): List of pins to setup
-
-        Returns:
-            bool: True if succes, False if failed
-        """
-
-        try:
-            for pin in pins: 
-                GPIO.setup(pin, GPIO.OUT)
-            return True
-        
-        except Exception as e:
-            if(self.p):
-                print(e)
-            return False
-        
-    def setOutput(self, pins: List[int], states: List[bool]) -> bool:
-        """Sets output of provided pins according to a state List corresponding to each pin
-
-        Args:
-            pins (List[int]): List of pin numbers to set output
-            states (List[bool]): List of states(0, 1) to set pins to
-
-        Returns:
-            bool: If different size arrays fails, returns False
-        """
-        # Ensure Same Size
-        if(len(pins) != len(states)):
-            return False
-        # Setup pin by pin
-        for pin, state in enumerate(states):
-            if(state):
-                GPIO.output(pins[pin], GPIO.HIGH)
-            else:  
-                GPIO.output(pins[pin], GPIO.LOW)
-        
-        return True
-
     def foward(self, time=WAIT_TIME) -> None:
         """Sets pins to move foward
 
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [1,1,0,1,1,0]);
+        sg.setOutput(self.pins, [1,1,0,1,1,0]);
 
         if(self.p):
             print("Moving Foward")
@@ -115,7 +61,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [1,0,1,1,0,1])
+        sg.setOutput(self.pins, [1,0,1,1,0,1])
         
         if(self.p):
             print("Moving Backwards")
@@ -129,7 +75,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [1,1,0,0,0,0])
+        sg.setOutput(self.pins, [1,1,0,0,0,0])
         
         if(self.p):
             print("Moving Right")
@@ -142,7 +88,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [0,0,0,1,1,0])
+        sg.setOutput(self.pins, [0,0,0,1,1,0])
         
         if(self.p):
             print("Moving Left")
@@ -156,7 +102,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [1,1,0,1,0,1])
+        sg.setOutput(self.pins, [1,1,0,1,0,1])
         
         if(self.p):
             print("Spinning Right")
@@ -169,7 +115,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [1,0,1,1,1,0])
+        sg.setOutput(self.pins, [1,0,1,1,1,0])
         
         if(self.p):
             print("Spinning Left")
@@ -182,7 +128,7 @@ class MovementController:
         Args:
             time (float, optional): Wait time at the of setting pins. Defaults to 0.5.
         """
-        self.setOutput(self.pins, [0,0,0,0,0,0])
+        sg.setOutput(self.pins, [0,0,0,0,0,0])
         if(self.p):
             print("Stopping")
         sleep(time)
