@@ -16,7 +16,7 @@ class BMP280:
             seaLevelPressure (float, optional): Reference Sea Level Pressure in hPa. Defaults to 1013.25.
         """ 
         self.address = address
-        self.bus = smbus.SMbus(1) # Only one bus in the rasp
+        self.bus = smbus.SMBus(1) # Only one bus in the rasp
         self.calibrationParams = self._readCalibrationData()
         self.seaLevelPressure = seaLevelPressure
 
