@@ -52,11 +52,12 @@ class Ultrasonic:
 
         self.trig = trig
         self.echo = echo
+        self.p = p
 
         GPIO.output(trig, GPIO.LOW)
         time.sleep(2)  # Allow sensor to settle
 
-    def measureDistance(self, p=False) -> float:
+    def measureDistance(self) -> float:
         """
         Sends a pulse from the trigger pin and measures the time taken for the
         pulse to return to the echo pin, calculating the distance based on the speed
@@ -90,7 +91,7 @@ class Ultrasonic:
         duration = end_time - start_time
         distance = (duration * 34300) / 2  # 34300 cm/s is the speed of sound
 
-        if p:
+        if self.p:
             print(f"Distance: {distance:.2f} cm")
 
         return distance
