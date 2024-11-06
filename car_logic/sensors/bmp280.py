@@ -8,12 +8,28 @@ from typing import Dict
 
 class BMP280:
 
-    def __init__(self, address=0x76) -> None:
-        
-        self.bus = smbus.SMbus(1) # Only one bus in the rasp
+    def __init__(self, address=0x76, seaLevelPressure=1013.25) -> None:
+        """Initializes the sensor, reads the calibration data, and prepares it
+        for reading the temperature, pressure, and calculation of altitude.
+
+        Args:
+            address (hexadecimal, optional): I2C address of the sensor. Defaults to 0x76.
+            seaLevelPressure (float, optional): Reference Sea Level Pressure in hPa. Defaults to 1013.25.
+        """ 
         self.address = address
+        self.bus = smbus.SMbus(1) # Only one bus in the rasp
         self.calibrationParams = self._readCalibrationData()
-    
+        self.seaLevelPressure = seaLevelPressure
+
+        # Start setup
+        self._setupSensor()
+
+    def _setupSensor(self) -> None:
+        """Simply config the sensore and prepare to read, setting config registers according to datasheet
+        """
+        # Write config registers
+        self.bus.write_byte_data(self.address, 0xF4, 0x27)  # Setting control meas
+        self.bus.write_byte_data(self.address, 0xF5, 0x27)
 
     def _readCalibrationData(self) -> Dict[str, int]:
 
@@ -46,3 +62,5 @@ class BMP280:
             int: The signed version of the short
         """
         return value - 65536 if value > 32767 else value
+
+    def readData(self) -> Dict[str, float]:
