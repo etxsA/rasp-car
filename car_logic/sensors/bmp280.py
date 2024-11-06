@@ -26,9 +26,15 @@ class BMP280:
     def _setupSensor(self) -> None:
         """Simply config the sensore and prepare to read, setting config registers according to datasheet
         """
-        # Write config registers
-        self.bus.write_byte_data(self.address, 0xF4, 0x27)  # Setting control meas
-        self.bus.write_byte_data(self.address, 0xF5, 0x27)
+        # Control Measurement Register (0xF4)
+        # osrs_t = 1 (×1), osrs_p = 1 (×1), mode = 3 (Normal)
+        control_meas = 0x3F  # 0011 1111
+        self.bus.write_byte_data(self.address, 0xF4, control_meas)
+    
+        # Configuration Register (0xF5)
+        # t_sb = 0 (0.5 ms), filter = 0 (Off), spi3w_en = 0 (4-wire SPI)
+        config = 0x00  # 0000 0000
+        self.bus.write_byte_data(self.address, 0xF5, config)
 
     def _readCalibrationData(self) -> Dict[str, int]:
 
