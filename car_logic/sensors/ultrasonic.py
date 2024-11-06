@@ -46,7 +46,7 @@ class Ultrasonic:
         echo : int
             GPIO pin number for the echo pin (default is 31).
         p : bool
-            Print mode for debugging, if set to True (default is False).
+            Print mode for debugging, if set to True(Not used at the moment) (default is False).
         """
         sg.setGPIOmode(False)
         GPIO.setup(trig, GPIO.OUT)
@@ -54,7 +54,6 @@ class Ultrasonic:
 
         self.trig = trig
         self.echo = echo
-        self.p = p
 
         GPIO.output(trig, GPIO.LOW)
         time.sleep(2)  # Allow sensor to settle
@@ -92,10 +91,6 @@ class Ultrasonic:
         # Calculate the duration and distance
         duration = end_time - start_time
         distance = (duration * 34300) / 2  # 34300 cm/s is the speed of sound
-
-        if self.p:
-            print(f"Distance: {distance:.2f} cm")
-
         return {"distance": distance}
 
     def __del__(self):
