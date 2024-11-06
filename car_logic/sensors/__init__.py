@@ -1,2 +1,2 @@
-from .sense import SensorControllers
+from .sense import SensorController
 from .ultrasonic import Ultrasonic
