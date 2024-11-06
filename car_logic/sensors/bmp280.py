@@ -2,7 +2,6 @@
 # All memory locations and registers where obtained from the datashet
 # https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
 import smbus
-import time
 
 from typing import Dict
 
@@ -69,6 +68,7 @@ class BMP280:
         # Raw data
         data = self.bus.read_i2c_block_data(self.address, 0xF7, 6)
 
+        # Combining bits to form integer
         adcP = data[0] << 12 | data[1] << 4 | data[2] >> 4
         adcT = data[3] << 12 | data[4] << 4 | data[5] >> 4
 
