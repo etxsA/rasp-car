@@ -1,2 +1,2 @@
 RPi.GPIO
-adafruit-circuitpython-bmp280
+smbus
