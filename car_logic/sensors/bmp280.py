@@ -52,7 +52,7 @@ class BMP280:
         
         return params
     
-    def _signed(self, value) -> int:
+    def _signed(self, value: int) -> int:
         """Helper function to convert from unsigned to signed
 
         Args:
@@ -73,4 +73,30 @@ class BMP280:
         adcT = data[3] << 12 | data[4] << 4 | data[5] >> 4
 
         # Use class priv methods to calc the different values
-        
+
+        temperature = self._calculateTemperature(adcT)
+        pressure = self._calculatePressure(adcP)
+        altitude = self._calculateAltitude(pressure)
+
+        return {"temperature": temperature, 
+                "pressure": pressure,
+                "altitude": altitude }
+    
+    def _calculateTemperature(self, adcT: float) -> float:
+        """Calculate Temperature using formula provided in the datasheet
+
+        Args:
+            adcT (float): Analog data of temperature
+
+        Returns:
+            float: Proccesd value of temperature
+        """
+        var1 = (((adcT >> 3) - (self.calibrationParams['dig_T1'] << 1)) *
+                self.calibrationParams['dig_T2']) >> 11
+        var2 = (((((adcT >> 4) - self.calibrationParams['dig_T1']) *
+                  ((adcT >> 4) - self.calibrationParams['dig_T1'])) >> 12) *
+                self.calibrationParams['dig_T3']) >> 14
+        tFine = var1 + var2
+        temperature = (tFine * 5 + 128) >> 8
+        self.tFine = tFine
+        return temperature / 100.0
