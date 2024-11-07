@@ -1,6 +1,7 @@
 import time
 import argparse
 import requests
+import paho.mqtt.client as mqtt
 from .sensors import SensorController
 from .motors.movements import MovementController
 
@@ -13,12 +14,22 @@ def getApiEndpoints(baseUrl):
         "distanceSensor": f"http://{baseUrl}/distance"
     }
 
+def getMqttTopics(baseTopic):
+    """Constructs MQTT topics for each sensor based on the base topic."""
+    return {
+        "lightSensor": f"{baseTopic}/1",
+        "accelerometer": f"{baseTopic}/1",
+        "environmentSensor": f"{baseTopic}/1",
+        "distanceSensor": f"{baseTopic}/1"
+    }
+
 def displayMainMenu():
     print("\nMain Menu:")
     print("1. Control Motors")
     print("2. Sensor Control")
     print("3. Send Data to API")
-    print("4. Exit")
+    print("4. Send Data to MQTT")
+    print("5. Exit")
 
 def displaySensorMenu():
     print("\nSensor Control Menu:")
@@ -31,6 +42,15 @@ def displaySensorMenu():
 
 def displayApiMenu():
     print("\nSend Data to API Menu:")
+    print("1. Send Light Sensor Data")
+    print("2. Send Accelerometer Data")
+    print("3. Send Environment Sensor Data")
+    print("4. Send Distance Sensor Data")
+    print("5. Send All Sensor Data")
+    print("6. Back to Main Menu")
+
+def displayMqttMenu():
+    print("\nSend Data to MQTT Menu:")
     print("1. Send Light Sensor Data")
     print("2. Send Accelerometer Data")
     print("3. Send Environment Sensor Data")
@@ -76,16 +96,30 @@ def sendDataToApi(sensorData, endpoint):
     except requests.exceptions.RequestException as e:
         print(f"Error sending data to {endpoint}: {e}")
 
-def main(baseUrl):
+def sendDataToMqtt(client, sensorData, topic):
+    """Publishes sensor data to the specified MQTT topic."""
+    result = client.publish(topic, payload=str(sensorData))
+    if result.rc == mqtt.MQTT_ERR_SUCCESS:
+        print(f"Data sent to MQTT topic {topic} successfully.")
+    else:
+        print(f"Failed to send data to MQTT topic {topic}")
+
+def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     # Create instances of the MovementController and SensorController classes
     motorController = MovementController()
     sensorController = SensorController()
     apiEndpoints = getApiEndpoints(baseUrl)
+    mqttTopics = getMqttTopics(mqttTopic)
+
+    # Setup MQTT client
+    client = mqtt.Client()
+    client.connect(mqttBroker, mqttPort, 60)
+    client.loop_start()  # Start the loop to process network traffic
 
     try:
         while True:
             displayMainMenu()
-            choice = input("Select an option (1-4): ")
+            choice = input("Select an option (1-5): ")
 
             if choice == '1':
                 controlMotors(motorController)
@@ -149,23 +183,57 @@ def main(baseUrl):
                     time.sleep(0.5)
 
             elif choice == '4':
+                # Send to MQTT Submenu
+                while True:
+                    displayMqttMenu()
+                    mqttChoice = input("Select an MQTT option (1-6): ")
+
+                    if mqttChoice == '1':
+                        lightData = sensorController.readLightSensor()
+                        sendDataToMqtt(client, lightData, mqttTopics["lightSensor"])
+                    elif mqttChoice == '2':
+                        accelData = sensorController.readAccelerometer()
+                        sendDataToMqtt(client, accelData, mqttTopics["accelerometer"])
+                    elif mqttChoice == '3':
+                        envData = sensorController.readEnvironmentSensor()
+                        sendDataToMqtt(client, envData, mqttTopics["environmentSensor"])
+                    elif mqttChoice == '4':
+                        distData = sensorController.readDistanceSensor()
+                        sendDataToMqtt(client, distData, mqttTopics["distanceSensor"])
+                    elif mqttChoice == '5':
+                        # Send all sensor data to MQTT
+                        allData = sensorController.readAllSensors()
+                        for sensor, data in allData.items():
+                            topic = mqttTopics.get(sensor)
+                            if topic:
+                                sendDataToMqtt(client, data, topic)
+                        print("All sensor data sent to MQTT.")
+                    elif mqttChoice == '6':
+                        break
+                    else:
+                        print("Invalid option. Please choose a number from 1 to 6.")
+                    time.sleep(0.5)
+
+            elif choice == '5':
                 print("Exiting...")
                 break
             else:
-                print("Invalid option. Please choose a number from 1 to 4.")
+                print("Invalid option. Please choose a number from 1 to 5.")
 
     except KeyboardInterrupt:
         print("\nProgram interrupted with KeyboardInterrupt. Exiting...")
     finally:
-        # Clean up resources
+        client.loop_stop()  # Stop the MQTT loop
+        client.disconnect()  # Disconnect the MQTT client
         del motorController
         del sensorController
 
 if __name__ == "__main__":
-    # Parse the base URL from command-line arguments
-    parser = argparse.ArgumentParser(description="Sensor and Motor Controller with API integration.")
+    parser = argparse.ArgumentParser(description="Sensor and Motor Controller with API and MQTT integration.")
     parser.add_argument("baseUrl", type=str, help="The base URL for the API server (e.g., http://yourapi.com)")
+    parser.add_argument("mqttBroker", type=str, help="The address of the MQTT broker")
+    parser.add_argument("mqttPort", type=int, help="The port of the MQTT broker")
+    parser.add_argument("mqttTopic", type=str, help="The base topic for MQTT (e.g., sensors)")
     args = parser.parse_args()
     
-    # Run the main program with the provided base URL
-    main(args.baseUrl)
+    main(args.baseUrl, args.mqttBroker, args.mqttPort, args.mqttTopic)
