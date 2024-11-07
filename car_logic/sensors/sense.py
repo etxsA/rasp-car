@@ -1,7 +1,7 @@
-from . import ADS1115
-from . import ADXL345 
-from . import BMP280
-from . import Ultrasonic
+from .ads1115 import ADS1115
+from .adxl345 import ADXL345 
+from .bmp280 import BMP280
+from .ultrasonic import Ultrasonic
 from typing import Dict
 
 class SensorController:
