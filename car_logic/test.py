@@ -1,8 +1,8 @@
 import time
 import argparse
 import requests
-from sensors import SensorController
-from motors.movements import MovementController
+from .sensors import SensorController
+from .motors.movements import MovementController
 
 def getApiEndpoints(baseUrl):
     """Constructs API endpoints for each sensor based on the base URL."""
