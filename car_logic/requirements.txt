@@ -1,3 +1,5 @@
 RPi.GPIO
 smbus
 paho-mqtt
+requests
+argparse
