@@ -17,9 +17,9 @@ def getApiEndpoints(baseUrl):
 def getMqttTopics(baseTopic):
     """Constructs MQTT topics for each sensor based on the base topic."""
     return {
-        "lightSensor": f"{baseTopic}/1",
-        "accelerometer": f"{baseTopic}/1",
-        "environmentSensor": f"{baseTopic}/1",
+        "lightSensor": f"{baseTopic}/adc",
+        "accelerometer": f"{baseTopic}/sensor2",
+        "environmentSensor": f"{baseTopic}/sensor1",
         "distanceSensor": f"{baseTopic}/1"
     }
 
