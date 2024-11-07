@@ -31,6 +31,9 @@ class ADXL345:
         self._setupSensor(self.rangeSetting)
 
         # Enable Events
+        self.enableFreeFallDetection()
+        self.enableMotionDetection()
+        self.enableTapDetection()
 
     def _setupSensor(self, rangeSetting) -> None: 
         """Config bytes for activating mesurement mode and resolution of sensor output(data_format)
