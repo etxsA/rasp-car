@@ -131,7 +131,10 @@ class ADXL345:
         y = y * scaleFactor
         z = z * scaleFactor  
 
-        return {"x": x, "y": y, "z": z}
+        # Read Current event 
+        event = self._readEvents()
+        
+        return {"x": x, "y": y, "z": z, "events": event}
 
     def _convertData(self, value:int) -> int:
         """Convert the raw data, to a signed intenteger
