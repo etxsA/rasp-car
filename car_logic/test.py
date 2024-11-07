@@ -13,6 +13,7 @@ photorestest = ADS1115()
 print(f"Distance in cm: {ultratest.measureDistance()}")
 print(bmptest.readData())
 print(acctest.readData())
+print(photorestest.readData())
 
 
 
