@@ -6,7 +6,7 @@ from .sensors import ADS1115
 ultratest = Ultrasonic()
 bmptest = BMP280()
 acctest = ADXL345()
-photorestest = ADS1115()
+photorestest = ADS1115(gain=0x01)
 
 
 
