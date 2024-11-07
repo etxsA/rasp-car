@@ -6,6 +6,7 @@ ultratest = Ultrasonic()
 bmptest = BMP280()
 acctest = ADXL345()
 
+
 print(f"Distance in cm: {ultratest.measureDistance()}")
 print(bmptest.readData())
 print(acctest.readData())

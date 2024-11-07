@@ -26,7 +26,7 @@ class ADXL345:
         """
         self.address = address
         self.bus = smbus.SMBus(1)
-        self.rangeSettting = rangeSetting
+        self.rangeSetting = rangeSetting
         # Initialization 
         self._setupSensor(self.rangeSetting)
 
@@ -133,7 +133,7 @@ class ADXL345:
 
         # Read Current event 
         event = self._readEvents()
-        
+
         return {"x": x, "y": y, "z": z, "events": event}
 
     def _convertData(self, value:int) -> int:
