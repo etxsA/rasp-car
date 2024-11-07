@@ -2,7 +2,6 @@
 # All memory locations and registers where obtained from the datashet
 # https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
 import smbus
-
 from typing import Dict
 
 class BMP280:
@@ -30,7 +29,7 @@ class BMP280:
         # osrs_t = 1 (×1), osrs_p = 1 (×1), mode = 3 (Normal)
         control_meas = 0x3F  # 0011 1111
         self.bus.write_byte_data(self.address, 0xF4, control_meas)
-    
+
         # Configuration Register (0xF5)
         # t_sb = 0 (0.5 ms), filter = 0 (Off), spi3w_en = 0 (4-wire SPI)
         config = 0x00  # 0000 0000
