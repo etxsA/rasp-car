@@ -112,8 +112,8 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     mqttTopics = getMqttTopics(mqttTopic)
 
     # Setup MQTT client
-    client = mqtt.Client()
-    client.connect(mqttBroker, mqttPort, 60)
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    client.connect(mqttBroker, mqttPort)
     client.loop_start()  # Start the loop to process network traffic
 
     try:
