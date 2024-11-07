@@ -7,10 +7,10 @@ from .motors.movements import MovementController
 def getApiEndpoints(baseUrl):
     """Constructs API endpoints for each sensor based on the base URL."""
     return {
-        "lightSensor": f"http://{baseUrl}/light_sensor",
+        "lightSensor": f"http://{baseUrl}/photoresistor",
         "accelerometer": f"http://{baseUrl}/accelerometer",
-        "environmentSensor": f"http://{baseUrl}/environment_sensor",
-        "distanceSensor": f"http://{baseUrl}/distance_sensor"
+        "environmentSensor": f"http://{baseUrl}/pressure",
+        "distanceSensor": f"http://{baseUrl}/distance"
     }
 
 def displayMainMenu():
