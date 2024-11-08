@@ -35,12 +35,6 @@ class MovementController:
         else :
             raise Exception("Couldn't config movement controller"); 
     
-    def __del__(self):
-        if(self.p):
-            print("Movement Controller Destroyed !!")
-        # Just make GPIO CleanUp
-        GPIO.cleanup()
-
     def foward(self, time=WAIT_TIME) -> None:
         """Sets pins to move foward
 
@@ -133,7 +127,15 @@ class MovementController:
             print("Stopping")
         sleep(time)
         return 
-
+    
+    def __del__(self):
+        if(self.p):
+            print("Movement Controller Destroyed !!")
+        #Check Before Deleting anything
+        try:
+            GPIO.cleanup()
+        except RuntimeError:
+            print("No GPIO channels were set up to clean up.")
 
 
 
