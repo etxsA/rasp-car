@@ -1,9 +1,6 @@
 import time
 import argparse
-from .sensors import SensorController
-from .motors.movements import MovementController
-from .connections import MqttController, APIController
-from typing import List
+from . import setupControllers
 
 def displayMainMenu():
     print("\nMain Menu:")
@@ -68,19 +65,6 @@ def controlMotors(motor):
         print("Invalid option. Please choose a number from 1 to 5.")
 
 
-def setupControllers(baseUrl: str, 
-                    mqttBroker: str=None, mqttPort: str=None, mqttTopic: str=None) -> List[object]:
-    apiC = APIController(baseUrl)
-    
-    config: dict = apiC.
-    
-    motor = MovementController()
-    sensors = SensorController()
-
-
-    mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
-    return [motor, sensors, apiC, mqttC]
-
 def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     # Create instances of the MovementController and sensors classes
     motor, sensors, apiC, mqttC = setupControllers(baseUrl, mqttBroker, mqttPort, mqttTopic)
@@ -127,23 +111,23 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
 
                     if apiChoice == '1':
                         lightData = sensors.readLightSensor()
-                        sendDataToApi(lightData, apiEndpoints["lightSensor"])
+                        apiC.sendData(lightData, "lightSensor")
                     elif apiChoice == '2':
                         accelData = sensors.readAccelerometer()
-                        sendDataToApi(accelData, apiEndpoints["accelerometer"])
+                        apiC.sendData(accelData, "accelerometer")
                     elif apiChoice == '3':
                         envData = sensors.readEnvironmentSensor()
-                        sendDataToApi(envData, apiEndpoints["environmentSensor"])
+                        apiC.sendData(envData, "environmentSensor")
                     elif apiChoice == '4':
                         distData = sensors.readDistanceSensor()
-                        sendDataToApi(distData, apiEndpoints["distanceSensor"])
+                        apiC.sendData(distData, "distanceSensor")
                     elif apiChoice == '5':
                         # Send all sensor data to API
                         allData = sensors.readAllSensors()
                         for sensor, data in allData.items():
-                            endpoint = apiEndpoints.get(sensor)
+                            endpoint = apiC.endpoints.get(sensor)
                             if endpoint:
-                                sendDataToApi(data, endpoint)
+                                apiC.sendData(data, endpoint)
                         print("All sensor data sent to API.")
                     elif apiChoice == '6':
                         break
