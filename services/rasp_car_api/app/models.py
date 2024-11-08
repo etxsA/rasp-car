@@ -14,8 +14,8 @@ class Photoresistor(Base):
     __tablename__ = "photoresistor"
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    analog_voltage = Column(Integer, nullable=False)
     voltage = Column(Double, nullable=False)
+    lightVoltage = Column(Double, nullable=False)
     timestamp = Column(DateTime, default=get_utc_now)
     
 class Accelerometer(Base):

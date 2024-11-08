@@ -7,8 +7,8 @@ from typing import Optional
 
 # 1. Photoresistor Schemas
 class PhotoresistorBase(BaseModel):
-    analog_voltage: int
     voltage: float
+    lightLevel: float
     timestamp: Optional[datetime] = None #If not provided, it will be generated
 
 class PhotoresistorCreate(PhotoresistorBase):
@@ -23,10 +23,10 @@ class Photoresistor(PhotoresistorBase):
 
 # 2. Accelerometer Schemas
 class AccelerometerBase(BaseModel):
-    x_axis: float
-    y_axis: float
-    z_axis: float
-    free_fall: bool
+    x: float
+    y: float
+    z: float
+    events: str
     timestamp: Optional[datetime] = None
 
 class AccelerometerCreate(AccelerometerBase):
