@@ -9,10 +9,11 @@ class APIController:
         "lightSensor": f"http://{baseUrl}/photoresistor",
         "accelerometer": f"http://{baseUrl}/accelerometer",
         "environmentSensor": f"http://{baseUrl}/pressure",
-        "distanceSensor": f"http://{baseUrl}/distance"
+        "distanceSensor": f"http://{baseUrl}/distance",
+        "config": f"http://{baseUrl}/config"
     }
     
-    def sendData(self, data: str, sensor: str) -> requests.Response:
+    def sendData(self, data: dict, sensor: str) -> requests.Response:
         try:
 
             if sensor not in self.endpoints.keys():

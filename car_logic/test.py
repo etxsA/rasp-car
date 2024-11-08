@@ -3,6 +3,7 @@ import argparse
 from .sensors import SensorController
 from .motors.movements import MovementController
 from .connections import MqttController, APIController
+from typing import List
 
 def displayMainMenu():
     print("\nMain Menu:")
@@ -66,26 +67,19 @@ def controlMotors(motor):
     else:
         print("Invalid option. Please choose a number from 1 to 5.")
 
-def sendDataToApi(sensorData, endpoint):
-    """Sends data to the specified API endpoint."""
-    try:
-        response = requests.post(endpoint, json=sensorData)
-        if response.status_code == 200:
-            print(f"Data sent to {endpoint} successfully.")
-        else:
-            print(f"Failed to send data to {endpoint}. Status code: {response.status_code}")
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending data to {endpoint}: {e}")
 
-def setupControllers(motorC, sensorsC, apiC, baseUrl, mqtt)
-
-def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
-    # Create instances of the MovementController and sensors classes
+def setupControllers(baseUrl: str, 
+                    mqttBroker: str=None, mqttPort: str=None, mqttTopic: str=None) -> List[object]:
     motor = MovementController()
     sensors = SensorController()
     apiC = APIController(baseUrl)
-    
+
     mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
+    return [motor, sensors, apiC, mqttC]
+
+def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
+    # Create instances of the MovementController and sensors classes
+    motor, sensors, apiC, mqttC = setupControllers(baseUrl, mqttBroker, mqttPort, mqttTopic)
 
     try:
         while True:
