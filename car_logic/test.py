@@ -19,7 +19,7 @@ def controlSensor(sensors):
         print("4. Read Distance Sensor Data")
         print("5. Read All Sensor Data")
         print("6. Back to Main Menu")
-        
+
         sensorChoice = input("Select a sensor option (1-6): ")
         if sensorChoice == '1':
             lightData = sensors.readLightSensor()
@@ -69,9 +69,7 @@ def controlApi(apiC, sensors):
             # Send all sensor data to API
             allData = sensors.readAllSensors()
             for sensor, data in allData.items():
-                endpoint = apiC.endpoints.get(sensor)
-                if endpoint:
-                    apiC.sendData(data, endpoint)
+                apiC.sendData(data, sensor)
             print("All sensor data sent to API.")
         elif apiChoice == '6':
             break
