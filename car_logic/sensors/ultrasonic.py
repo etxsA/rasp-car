@@ -95,4 +95,4 @@ class Ultrasonic:
 
     def __del__(self):
         """Destructor to clean up GPIO resources when the object is deleted."""
-        GPIO.cleanup([self.trig, self.echo])
+        GPIO.cleanup()
