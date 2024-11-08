@@ -38,31 +38,38 @@ def displayMqttMenu():
     print("6. Back to Main Menu")
 
 def controlMotors(motor):
-    print("\nMotor Control Options:")
+    print("\nMovement Controller Menu:")
     print("1. Move Forward")
     print("2. Move Backward")
-    print("3. Turn Left")
-    print("4. Turn Right")
-    print("5. Stop")
-    choice = input("Select an option (1-5): ")
+    print("3. Turn Right")
+    print("4. Turn Left")
+    print("5. Spin Right")
+    print("6. Spin Left")
+    print("7. Stop")
+    print("8. Exit")
+    choice = input("Select an option (1-8): ")
 
     if choice == '1':
-        motor.moveForward()
-        print("Moving forward")
+        motor.foward()
     elif choice == '2':
-        motor.moveBackward()
-        print("Moving backward")
+        motor.backwards()
     elif choice == '3':
-        motor.turnLeft()
-        print("Turning left")
+        motor.right()
     elif choice == '4':
-        motor.turnRight()
-        print("Turning right")
+        motor.left()
     elif choice == '5':
+        motor.spinRight()
+    elif choice == '6':
+        motor.spinLeft()
+    elif choice == '7':
         motor.stop()
-        print("Motors stopped")
+    elif choice == '8':
+        print("Exiting...")
+        break
     else:
-        print("Invalid option. Please choose a number from 1 to 5.")
+        print("Invalid option. Please choose a number from 1 to 8.")
+    # Pause briefly to allow user to see action output
+    time.sleep(0.5)
 
 
 def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
