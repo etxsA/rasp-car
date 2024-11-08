@@ -1,18 +1,8 @@
 import time
 import argparse
-import requests
 from .sensors import SensorController
 from .motors.movements import MovementController
-from .connections import MqttController
-
-def getApiEndpoints(baseUrl):
-    """Constructs API endpoints for each sensor based on the base URL."""
-    return {
-        "lightSensor": f"http://{baseUrl}/photoresistor",
-        "accelerometer": f"http://{baseUrl}/accelerometer",
-        "environmentSensor": f"http://{baseUrl}/pressure",
-        "distanceSensor": f"http://{baseUrl}/distance"
-    }
+from .connections import MqttController, APIController
 
 def displayMainMenu():
     print("\nMain Menu:")
@@ -49,7 +39,7 @@ def displayMqttMenu():
     print("5. Send All Sensor Data")
     print("6. Back to Main Menu")
 
-def controlMotors(motorController):
+def controlMotors(motor):
     print("\nMotor Control Options:")
     print("1. Move Forward")
     print("2. Move Backward")
@@ -59,19 +49,19 @@ def controlMotors(motorController):
     choice = input("Select an option (1-5): ")
 
     if choice == '1':
-        motorController.moveForward()
+        motor.moveForward()
         print("Moving forward")
     elif choice == '2':
-        motorController.moveBackward()
+        motor.moveBackward()
         print("Moving backward")
     elif choice == '3':
-        motorController.turnLeft()
+        motor.turnLeft()
         print("Turning left")
     elif choice == '4':
-        motorController.turnRight()
+        motor.turnRight()
         print("Turning right")
     elif choice == '5':
-        motorController.stop()
+        motor.stop()
         print("Motors stopped")
     else:
         print("Invalid option. Please choose a number from 1 to 5.")
@@ -87,12 +77,15 @@ def sendDataToApi(sensorData, endpoint):
     except requests.exceptions.RequestException as e:
         print(f"Error sending data to {endpoint}: {e}")
 
+def setupControllers(motorC, sensorsC, apiC, baseUrl, mqtt)
+
 def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
-    # Create instances of the MovementController and SensorController classes
-    motorController = MovementController()
-    sensorController = SensorController()
-    apiEndpoints = getApiEndpoints(baseUrl)
-    mqttController = MqttController(mqttBroker, mqttPort, mqttTopic)
+    # Create instances of the MovementController and sensors classes
+    motor = MovementController()
+    sensors = SensorController()
+    apiC = APIController(baseUrl)
+    
+    mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
 
     try:
         while True:
@@ -100,7 +93,7 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
             choice = input("Select an option (1-5): ")
 
             if choice == '1':
-                controlMotors(motorController)
+                controlMotors(motor)
             elif choice == '2':
                 # Sensor Control Submenu
                 while True:
@@ -108,19 +101,19 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
                     sensorChoice = input("Select a sensor option (1-6): ")
 
                     if sensorChoice == '1':
-                        lightData = sensorController.readLightSensor()
+                        lightData = sensors.readLightSensor()
                         print("Light Sensor Data:", lightData)
                     elif sensorChoice == '2':
-                        accelData = sensorController.readAccelerometer()
+                        accelData = sensors.readAccelerometer()
                         print("Accelerometer Data:", accelData)
                     elif sensorChoice == '3':
-                        envData = sensorController.readEnvironmentSensor()
+                        envData = sensors.readEnvironmentSensor()
                         print("Environment Sensor Data:", envData)
                     elif sensorChoice == '4':
-                        distData = sensorController.readDistanceSensor()
+                        distData = sensors.readDistanceSensor()
                         print("Distance Sensor Data:", distData)
                     elif sensorChoice == '5':
-                        allData = sensorController.readAllSensors()
+                        allData = sensors.readAllSensors()
                         print("All Sensor Data:", allData)
                     elif sensorChoice == '6':
                         break
@@ -135,20 +128,20 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
                     apiChoice = input("Select an API option (1-6): ")
 
                     if apiChoice == '1':
-                        lightData = sensorController.readLightSensor()
+                        lightData = sensors.readLightSensor()
                         sendDataToApi(lightData, apiEndpoints["lightSensor"])
                     elif apiChoice == '2':
-                        accelData = sensorController.readAccelerometer()
+                        accelData = sensors.readAccelerometer()
                         sendDataToApi(accelData, apiEndpoints["accelerometer"])
                     elif apiChoice == '3':
-                        envData = sensorController.readEnvironmentSensor()
+                        envData = sensors.readEnvironmentSensor()
                         sendDataToApi(envData, apiEndpoints["environmentSensor"])
                     elif apiChoice == '4':
-                        distData = sensorController.readDistanceSensor()
+                        distData = sensors.readDistanceSensor()
                         sendDataToApi(distData, apiEndpoints["distanceSensor"])
                     elif apiChoice == '5':
                         # Send all sensor data to API
-                        allData = sensorController.readAllSensors()
+                        allData = sensors.readAllSensors()
                         for sensor, data in allData.items():
                             endpoint = apiEndpoints.get(sensor)
                             if endpoint:
@@ -167,24 +160,24 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
                     mqttChoice = input("Select an MQTT option (1-6): ")
 
                     if mqttChoice == '1':
-                        lightData = sensorController.readLightSensor()
-                        mqttController.sendData(lightData, "lightSensor")
+                        lightData = sensors.readLightSensor()
+                        mqttC.sendData(lightData, "lightSensor")
                     elif mqttChoice == '2':
-                        accelData = sensorController.readAccelerometer()
-                        mqttController.sendData(accelData, "accelerometer")
+                        accelData = sensors.readAccelerometer()
+                        mqttC.sendData(accelData, "accelerometer")
                     elif mqttChoice == '3':
-                        envData = sensorController.readEnvironmentSensor()
-                        mqttController.sendData(envData, "environmentSensor")
+                        envData = sensors.readEnvironmentSensor()
+                        mqttC.sendData(envData, "environmentSensor")
                     elif mqttChoice == '4':
-                        distData = sensorController.readDistanceSensor()
-                        mqttController.sendData(distData, "distance")
+                        distData = sensors.readDistanceSensor()
+                        mqttC.sendData(distData, "distance")
                     elif mqttChoice == '5':
                         # Send all sensor data to MQTT
-                        allData = sensorController.readAllSensors()
+                        allData = sensors.readAllSensors()
                         for sensor, data in allData.items():
-                            topics = mqttController.topics
+                            topics = mqttC.topics
                             if sensor in topics.keys():
-                                mqttController.sendData(data, sensor)
+                                mqttC.sendData(data, sensor)
                         print("All sensor data sent to MQTT.")
                     elif mqttChoice == '6':
                         break
@@ -201,16 +194,16 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     except KeyboardInterrupt:
         print("\nProgram interrupted with KeyboardInterrupt. Exiting...")
     finally:
-        del mqttController
-        del motorController
-        del sensorController
+        del mqttC
+        del motor
+        del sensors
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sensor and Motor Controller with API and MQTT integration.")
     parser.add_argument("baseUrl", type=str, help="The base URL for the API server (e.g., http://yourapi.com)")
-    parser.add_argument("mqttBroker", type=str, help="The address of the MQTT broker")
-    parser.add_argument("mqttPort", type=int, help="The port of the MQTT broker")
-    parser.add_argument("mqttTopic", type=str, help="The base topic for MQTT (e.g., sensors)")
+    parser.add_argument("mqttBroker", nargs='?', type=str, help="The address of the MQTT broker")
+    parser.add_argument("mqttPort", nargs='?', type=int, help="The port of the MQTT broker")
+    parser.add_argument("mqttTopic", nargs='?', type=str, help="The base topic for MQTT (e.g., sensors)")
     args = parser.parse_args()
     
     main(args.baseUrl, args.mqttBroker, args.mqttPort, args.mqttTopic)
