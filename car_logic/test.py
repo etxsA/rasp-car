@@ -1,9 +1,9 @@
 import time
 import argparse
 import requests
-import paho.mqtt.client as mqtt
 from .sensors import SensorController
 from .motors.movements import MovementController
+from .connections import MqttController
 
 def getApiEndpoints(baseUrl):
     """Constructs API endpoints for each sensor based on the base URL."""
@@ -12,15 +12,6 @@ def getApiEndpoints(baseUrl):
         "accelerometer": f"http://{baseUrl}/accelerometer",
         "environmentSensor": f"http://{baseUrl}/pressure",
         "distanceSensor": f"http://{baseUrl}/distance"
-    }
-
-def getMqttTopics(baseTopic):
-    """Constructs MQTT topics for each sensor based on the base topic."""
-    return {
-        "lightSensor": f"{baseTopic}/adc",
-        "accelerometer": f"{baseTopic}/sensor2",
-        "environmentSensor": f"{baseTopic}/sensor1",
-        "distanceSensor": f"{baseTopic}/1"
     }
 
 def displayMainMenu():
@@ -96,25 +87,12 @@ def sendDataToApi(sensorData, endpoint):
     except requests.exceptions.RequestException as e:
         print(f"Error sending data to {endpoint}: {e}")
 
-def sendDataToMqtt(client, sensorData, topic):
-    """Publishes sensor data to the specified MQTT topic."""
-    result = client.publish(topic, payload=str(sensorData))
-    if result.rc == mqtt.MQTT_ERR_SUCCESS:
-        print(f"Data sent to MQTT topic {topic} successfully.")
-    else:
-        print(f"Failed to send data to MQTT topic {topic}")
-
 def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     # Create instances of the MovementController and SensorController classes
     motorController = MovementController()
     sensorController = SensorController()
     apiEndpoints = getApiEndpoints(baseUrl)
-    mqttTopics = getMqttTopics(mqttTopic)
-
-    # Setup MQTT client
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-    client.connect(mqttBroker, mqttPort)
-    client.loop_start()  # Start the loop to process network traffic
+    mqttController = MqttController(mqttBroker, mqttPort, mqttTopic)
 
     try:
         while True:
@@ -190,23 +168,23 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
 
                     if mqttChoice == '1':
                         lightData = sensorController.readLightSensor()
-                        sendDataToMqtt(client, lightData, mqttTopics["lightSensor"])
+                        mqttController.sendData(lightData, "lightSensor")
                     elif mqttChoice == '2':
                         accelData = sensorController.readAccelerometer()
-                        sendDataToMqtt(client, accelData, mqttTopics["accelerometer"])
+                        mqttController.sendData(accelData, "accelerometer")
                     elif mqttChoice == '3':
                         envData = sensorController.readEnvironmentSensor()
-                        sendDataToMqtt(client, envData, mqttTopics["environmentSensor"])
+                        mqttController.sendData(envData, "environmentSensor")
                     elif mqttChoice == '4':
                         distData = sensorController.readDistanceSensor()
-                        sendDataToMqtt(client, distData, mqttTopics["distanceSensor"])
+                        mqttController.sendData(distData, "distance")
                     elif mqttChoice == '5':
                         # Send all sensor data to MQTT
                         allData = sensorController.readAllSensors()
                         for sensor, data in allData.items():
-                            topic = mqttTopics.get(sensor)
-                            if topic:
-                                sendDataToMqtt(client, data, topic)
+                            topics = mqttController.topics
+                            if sensor in topics.keys():
+                                mqttController.sendData(data, sensor)
                         print("All sensor data sent to MQTT.")
                     elif mqttChoice == '6':
                         break
@@ -223,8 +201,7 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
     except KeyboardInterrupt:
         print("\nProgram interrupted with KeyboardInterrupt. Exiting...")
     finally:
-        client.loop_stop()  # Stop the MQTT loop
-        client.disconnect()  # Disconnect the MQTT client
+        del mqttController
         del motorController
         del sensorController
 
