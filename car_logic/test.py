@@ -11,7 +11,13 @@ def displayMainMenu():
     print("5. Exit")
 
 def controlSensor(sensors):
-    # Sensor Control Submenu
+    print("\nRead Sensor Data Menu:")
+    print("1. Read Light Sensor Data")
+    print("2. Read Accelerometer Data")
+    print("3. Read Environment Sensor Data")
+    print("4. Read Distance Sensor Data")
+    print("5. Read All Sensor Data")
+    print("6. Back to Main Menu")
     while True:
         sensorChoice = input("Select a sensor option (1-6): ")
         if sensorChoice == '1':
