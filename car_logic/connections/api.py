@@ -50,7 +50,7 @@ class APIController:
                 print(f"Failed to send data to {self.endpoints[sensor]}. Status code: {response.status_code}")
                 return response
         except requests.exceptions.RequestException as e:
-            print(f"Error sending data to {self.endpoints[sensor]}: {e}")
+            print(f"Error sending data to endpoint for {sensor}: {e}")
 
     def getData(self, sensor: str) -> Dict[str, Any]:
         """
