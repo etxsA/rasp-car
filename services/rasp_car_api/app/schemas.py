@@ -70,4 +70,14 @@ class Pressure(PressureBase):
 
 # Config Response
 
+class ConfigBase(BaseModel):
+    motor: Optional[dict] = None
+    sensor: Optional[dict] = None 
+    mqtt: dict
+
+class RaspConfig(ConfigBase):
+    class Config:
+        from_attributes = True
+
+
     

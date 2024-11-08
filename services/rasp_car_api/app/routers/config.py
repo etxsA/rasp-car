@@ -6,7 +6,16 @@ from app import schemas
 router = APIRouter()
 
 # Edit Dict to modify configs
+configuration = {
+    # motor : {},
+    # sensor : {},
+    "mqtt": {
+        "broker": "broker.hivemq.com",
+        "port" :  1883,
+        "topic": "equipo3",
+    }
+}
 
-@router.get("/config/", response_model=list[schemas.Distance])
-def read_distances(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_distances(db=db, skip=skip, limit=limit)
+@router.get("/config/", response_model=schemas.RaspConfig)
+def read_distances():
+    return configuration
