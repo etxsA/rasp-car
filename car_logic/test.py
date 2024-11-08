@@ -70,9 +70,13 @@ def controlMotors(motor):
 
 def setupControllers(baseUrl: str, 
                     mqttBroker: str=None, mqttPort: str=None, mqttTopic: str=None) -> List[object]:
+    apiC = APIController(baseUrl)
+    
+    config: dict = apiC.
+    
     motor = MovementController()
     sensors = SensorController()
-    apiC = APIController(baseUrl)
+
 
     mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
     return [motor, sensors, apiC, mqttC]
