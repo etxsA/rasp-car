@@ -74,6 +74,7 @@ class ConfigBase(BaseModel):
     motor: Optional[dict] = None
     sensor: Optional[dict] = None 
     mqtt: dict
+    sql: Optional[str] = None
 
 class RaspConfig(ConfigBase):
     class Config:
