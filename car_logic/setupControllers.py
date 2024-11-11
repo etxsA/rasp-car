@@ -53,7 +53,7 @@ def setupControllers(baseUrl: str,
     if not dbURL:
         print(f"Using dbURL provided by API <- No DB config URL provided")
         dbURL = config.get("sql", "")
-
+        print(config)
         if dbURL != "":
             dbC = DBController(dbURL)
         else:
