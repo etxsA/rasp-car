@@ -206,7 +206,7 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic, dbURL):
                 controlApi(apiC, sensors)
             elif choice == '4':
                 controlMqtt(mqttC, sensors)
-            elif chooice == '5':
+            elif choice == '5':
                 controlDB(dbC, sensors)
             elif choice == '6':
                 print("Exiting...")
