@@ -1,5 +1,4 @@
 # Definition of ORM models for SQLAlchemy
-# main/models.py
 from sqlalchemy import Column, Integer, Float, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone

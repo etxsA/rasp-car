@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI
 from app import models
-from app.routers import photoresistor, accelerometer, distance, pressure
+from app.routers import photoresistor, accelerometer, distance, pressure, config
 from app.database import engine
 
 app = FastAPI()
@@ -16,6 +16,9 @@ app.include_router(photoresistor.router)
 app.include_router(accelerometer.router)
 app.include_router(distance.router)
 app.include_router(pressure.router)
+
+# Configuration endpoint 
+app.include_router(config.router)
 
 
 @app.get("/")

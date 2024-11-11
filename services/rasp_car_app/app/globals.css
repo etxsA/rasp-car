@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+:root {
+  /* Font Style */
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+  --background: #ffffff;
+  --foreground: #171717;
+  --navColor: #1F0606;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1E1E1E;
+    --foreground: #DCDCDC;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-gradient-left { 
+  background: linear-gradient(90deg, rgba(30, 30, 30, 0) 1.03%, #0E0C15 98.97%);
+}
+
+.bg-gradient-right {
+  background: linear-gradient(270deg, rgba(30, 30, 30, 0) 1.45%, #0E0C15 99.15%);
+}

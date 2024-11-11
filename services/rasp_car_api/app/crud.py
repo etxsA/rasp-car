@@ -4,12 +4,12 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 from app.models import get_utc_now
 
-
 # 1. Photoresistor CRUD operations
+
 def create_photoresistor(db: Session, photoresistor: schemas.PhotoresistorCreate):
     db_photoresistor = models.Photoresistor(
-        analog_voltage=photoresistor.analog_voltage,
         voltage=photoresistor.voltage,
+        lightLevel=photoresistor.lightLevel,
         timestamp=photoresistor.timestamp or get_utc_now()
     )
     db.add(db_photoresistor)
@@ -30,13 +30,13 @@ def delete_photoresistor(db: Session, photoresistor_id: int):
         db.commit()
     return db_photoresistor
 
-# 2. Accelerometer CRUD operations
+## Accelerometer operations
 def create_accelerometer(db: Session, accelerometer: schemas.AccelerometerCreate):
     db_accelerometer = models.Accelerometer(
-        x_axis=accelerometer.x_axis,
-        y_axis=accelerometer.y_axis,
-        z_axis=accelerometer.z_axis,
-        free_fall=accelerometer.free_fall,
+        x=accelerometer.x,
+        y=accelerometer.y,
+        z=accelerometer.z,
+        events=accelerometer.events,
         timestamp=accelerometer.timestamp or get_utc_now()
     )
     db.add(db_accelerometer)
@@ -57,7 +57,7 @@ def delete_accelerometer(db: Session, accelerometer_id: int):
         db.commit()
     return db_accelerometer
 
-# 3. Distance CRUD operations
+## Distance Operations
 def create_distance(db: Session, distance: schemas.DistanceCreate):
     db_distance = models.Distance(
         distance=distance.distance,
@@ -81,7 +81,7 @@ def delete_distance(db: Session, distance_id: int):
         db.commit()
     return db_distance
 
-# 4. Pressure CRUD operations
+# Pressure Operations
 def create_pressure(db: Session, pressure: schemas.PressureCreate):
     db_pressure = models.Pressure(
         temperature=pressure.temperature,

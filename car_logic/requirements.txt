@@ -3,3 +3,8 @@ smbus
 paho-mqtt
 requests
 argparse
+
+sqlalchemy
+pydantic
+pymysql
+cryptography

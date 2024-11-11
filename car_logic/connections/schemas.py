@@ -1,6 +1,5 @@
 # Definition of Schemas
-# For serialization and validation
-# main/schemas.py
+# For serialization and validationS
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
@@ -14,13 +13,6 @@ class PhotoresistorBase(BaseModel):
 class PhotoresistorCreate(PhotoresistorBase):
     pass
 
-# Set ORM MODE it will be used for every single class
-class Photoresistor(PhotoresistorBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
 # 2. Accelerometer Schemas
 class AccelerometerBase(BaseModel):
     x: float
@@ -32,12 +24,6 @@ class AccelerometerBase(BaseModel):
 class AccelerometerCreate(AccelerometerBase):
     pass
 
-class Accelerometer(AccelerometerBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
 # 3. Distance Schemas
 class DistanceBase(BaseModel):
     distance: float
@@ -45,12 +31,6 @@ class DistanceBase(BaseModel):
 
 class DistanceCreate(DistanceBase):
     pass
-
-class Distance(DistanceBase):
-    id: int
-
-    class Config:
-        from_attributes = True
 
 # 4. Pressure Schemas
 class PressureBase(BaseModel):
@@ -61,24 +41,3 @@ class PressureBase(BaseModel):
 
 class PressureCreate(PressureBase):
     pass
-
-class Pressure(PressureBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-# Config Response
-
-class ConfigBase(BaseModel):
-    motor: Optional[dict] = None
-    sensor: Optional[dict] = None 
-    mqtt: dict
-    sql: Optional[str] = None
-
-class RaspConfig(ConfigBase):
-    class Config:
-        from_attributes = True
-
-
-    

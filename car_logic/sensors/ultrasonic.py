@@ -95,4 +95,8 @@ class Ultrasonic:
 
     def __del__(self):
         """Destructor to clean up GPIO resources when the object is deleted."""
-        GPIO.cleanup([self.trig, self.echo])
+        #Check Before Deleting anything
+        try:
+            GPIO.cleanup()
+        except RuntimeError:
+            print("No GPIO channels were set up to clean up.")
