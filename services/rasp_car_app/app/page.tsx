@@ -1,6 +1,3 @@
-import Image from "next/image";
-
-// Components
 import MainNavbar from "@/components/MainNavbar";
 import Chart from "@/components/Chart";
 
