@@ -22,12 +22,12 @@ class DBController:
             db.close()
     
 
-    def send_photoresistor(self, photoresistor):
+    def send_photoresistor(self, photoresistor:dict):
         db = self._get_db()
         db_photoresistor = models.Photoresistor(
-            voltage=photoresistor.voltage,
-            lightLevel=photoresistor.lightLevel,
-            timestamp=photoresistor.timestamp or get_utc_now()
+            voltage=photoresistor["voltage"],
+            lightLevel=photoresistor["lightLevel"],
+            timestamp=photoresistor.get("timestamp", None) or get_utc_now()
         )
         db.add(db_photoresistor)
         db.commit()
@@ -35,14 +35,14 @@ class DBController:
         return db_photoresistor
 
     ## Accelerometer operations
-    def send_accelerometer(self, accelerometer):
+    def send_accelerometer(self, accelerometer: dict):
         db = self._get_db()
         db_accelerometer = models.Accelerometer(
-            x=accelerometer.x,
-            y=accelerometer.y,
-            z=accelerometer.z,
-            events=accelerometer.events,
-            timestamp=accelerometer.timestamp or get_utc_now()
+            x=accelerometer["x"],
+            y=accelerometer["y"],
+            z=accelerometer["z"],
+            events=accelerometer["events"],
+            timestamp=accelerometer.get("timestamp", None) or get_utc_now()
         )
         db.add(db_accelerometer)
         db.commit()
@@ -54,8 +54,8 @@ class DBController:
     def send_distance(self, distance):
         db = self._get_db()
         db_distance = models.Distance(
-            distance=distance.distance,
-            timestamp=distance.timestamp or get_utc_now()
+            distance=distance["distance"],
+            timestamp=distance.get("timestamp", None) or get_utc_now()
         )
         db.add(db_distance)
         db.commit()
@@ -66,10 +66,10 @@ class DBController:
     def send_pressure(self, pressure):
         db = self._get_db()
         db_pressure = models.Pressure(
-            temperature=pressure.temperature,
-            pressure=pressure.pressure,
-            altitude=pressure.altitude,
-            timestamp=pressure.timestamp or get_utc_now()
+            temperature=pressure["temperature"],
+            pressure=pressure["pressure"],
+            altitude=pressure["altitude"],
+            timestamp=pressure.get("timestamp", None) or get_utc_now()
         )
         db.add(db_pressure)
         db.commit()
