@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from . import models
 from .models import get_utc_now
-from . import schemas
 
 
 
@@ -23,7 +22,7 @@ class DBController:
             db.close()
     
 
-    def send_photoresistor(self, photoresistor: schemas.PhotoresistorCreate):
+    def send_photoresistor(self, photoresistor):
         db = self._get_db()
         db_photoresistor = models.Photoresistor(
             voltage=photoresistor.voltage,
@@ -36,7 +35,7 @@ class DBController:
         return db_photoresistor
 
     ## Accelerometer operations
-    def send_accelerometer(self, accelerometer: schemas.AccelerometerCreate):
+    def send_accelerometer(self, accelerometer):
         db = self._get_db()
         db_accelerometer = models.Accelerometer(
             x=accelerometer.x,
@@ -52,7 +51,7 @@ class DBController:
 
 
     ## Distance Operations
-    def send_distance(self, distance: schemas.DistanceCreate):
+    def send_distance(self, distance):
         db = self._get_db()
         db_distance = models.Distance(
             distance=distance.distance,
@@ -64,7 +63,7 @@ class DBController:
         return db_distance
 
     # Pressure Operations
-    def send_pressure(self, pressure: schemas.PressureCreate):
+    def send_pressure(self, pressure):
         db = self._get_db()
         db_pressure = models.Pressure(
             temperature=pressure.temperature,
