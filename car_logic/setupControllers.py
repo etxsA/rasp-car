@@ -52,12 +52,12 @@ def setupControllers(baseUrl: str,
     # URL Direct Conection
     if not dbURL:
         print(f"Using dbURL provided by API <- No DB config URL provided")
-        dbURL = config.get("sql", None)
+        dbURL = config.get("sql", "")
 
-        if dbURL:
+        if dbURL != "":
             dbC = DBController(dbURL)
         else:
-            raise ConnectionError("Error fetching config from API, may be broken")
+            raise ConnectionError("Error fetching config from API, may be broken for dB")
     else:
         dbC = DBController(dbURL)
 
