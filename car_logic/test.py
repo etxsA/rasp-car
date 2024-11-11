@@ -128,6 +128,7 @@ def controlDB(dbC, sensors):
         mqttChoice = input("Select an sensor option (1-6): ")
         if mqttChoice == '1':
             lightData = sensors.readLightSensor()
+            print(lightData)
             dbC.send_photoresistor(lightData)
         elif mqttChoice == '2':
             accelData = sensors.readAccelerometer()
