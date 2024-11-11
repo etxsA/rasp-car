@@ -23,7 +23,7 @@ class DBController:
     
 
     def send_photoresistor(self, photoresistor:dict):
-        db = self._get_db()
+        db = next(self._get_db())
         db_photoresistor = models.Photoresistor(
             voltage=photoresistor["voltage"],
             lightLevel=photoresistor["lightLevel"],
@@ -36,7 +36,7 @@ class DBController:
 
     ## Accelerometer operations
     def send_accelerometer(self, accelerometer: dict):
-        db = self._get_db()
+        db = next(self._get_db())
         db_accelerometer = models.Accelerometer(
             x=accelerometer["x"],
             y=accelerometer["y"],
@@ -52,7 +52,7 @@ class DBController:
 
     ## Distance Operations
     def send_distance(self, distance):
-        db = self._get_db()
+        db = next(self._get_db())
         db_distance = models.Distance(
             distance=distance["distance"],
             timestamp=distance.get("timestamp", None) or get_utc_now()
@@ -64,7 +64,7 @@ class DBController:
 
     # Pressure Operations
     def send_pressure(self, pressure):
-        db = self._get_db()
+        db = next(self._get_db())
         db_pressure = models.Pressure(
             temperature=pressure["temperature"],
             pressure=pressure["pressure"],
