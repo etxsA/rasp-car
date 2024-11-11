@@ -13,7 +13,8 @@ configuration = {
         "broker": "broker.hivemq.com",
         "port" :  1883,
         "topic": "equipo3",
-    }
+    },
+    "sql": "mysql+pymysql://root:toor123@10.48.229.221:3306/Sensors",
 }
 
 @router.get("/config/", response_model=schemas.RaspConfig)

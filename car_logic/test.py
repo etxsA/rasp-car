@@ -6,9 +6,10 @@ def displayMainMenu():
     print("\nMain Menu:")
     print("1. Control Motors")
     print("2. Sensor Control")
-    print("3. Send Data to API")
-    print("4. Send Data to MQTT")
-    print("5. Exit")
+    print("3. Send Data by API")
+    print("4. Send Data by MQTT")
+    print("5. Send data by Direct SQL")
+    print("6. Exit")
 
 def controlSensor(sensors):
     while True:
@@ -114,6 +115,43 @@ def controlMqtt(mqttC, sensors):
             print("Invalid option. Please choose a number from 1 to 6.")
         time.sleep(0.5)
 
+def controlDB(dbC, sensors):
+    while True:
+        print("\nSend Data by Direct SQL Menu:")
+        print("1. Send Light Sensor Data")
+        print("2. Send Accelerometer Data")
+        print("3. Send Environment Sensor Data")
+        print("4. Send Distance Sensor Data")
+        print("5. Send All Sensor Data")
+        print("6. Back to Main Menu")
+
+        mqttChoice = input("Select an sensor option (1-6): ")
+        if mqttChoice == '1':
+            lightData = sensors.readLightSensor()
+            dbC.send_photoresistor(lightData)
+        elif mqttChoice == '2':
+            accelData = sensors.readAccelerometer()
+            dbC.send_accelerometer(accelData)
+        elif mqttChoice == '3':
+            envData = sensors.readEnvironmentSensor()
+            dbC.send_pressure(envData)
+        elif mqttChoice == '4':
+            distData = sensors.readDistanceSensor()
+            dbC.send_distance(distData)
+        # elif mqttChoice == '5':
+        #     # Send all sensor data to MQTT
+        #     allData = sensors.readAllSensors()
+        #     for sensor, data in allData.items():
+        #         topics = m.topics
+        #         if sensor in topics.keys():
+        #             mqttC.sendData(data, sensor)
+        #     print("All sensor data sent to MQTT.")
+        elif mqttChoice == '6':
+            break
+        else:
+            print("Invalid option. Please choose a number from 1 to 6.")
+        time.sleep(0.5)
+
 def controlMotors(motor):
     while True: 
         print("\nMovement Controller Menu:")
@@ -150,9 +188,9 @@ def controlMotors(motor):
         time.sleep(0.5)
 
 
-def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
+def main(baseUrl, mqttBroker, mqttPort, mqttTopic, dbURL):
     # Create instances of the MovementController and sensors classes
-    motor, sensors, apiC, mqttC = setupControllers(baseUrl, mqttBroker, mqttPort, mqttTopic)
+    motor, sensors, apiC, mqttC, dbC = setupControllers(baseUrl, mqttBroker, mqttPort, mqttTopic, dbURL)
 
     try:
         while True:
@@ -168,7 +206,9 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
                 controlApi(apiC, sensors)
             elif choice == '4':
                 controlMqtt(mqttC, sensors)
-            elif choice == '5':
+            elif chooice == '5':
+                controlDB(dbC, sensors)
+            elif choice == '6':
                 print("Exiting...")
                 break
             else:
@@ -180,6 +220,8 @@ def main(baseUrl, mqttBroker, mqttPort, mqttTopic):
         del mqttC
         del motor
         del sensors
+        del apiC
+        del dbC
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sensor and Motor Controller with API and MQTT integration.")
@@ -187,6 +229,7 @@ if __name__ == "__main__":
     parser.add_argument("mqttBroker", nargs='?', type=str, help="The address of the MQTT broker")
     parser.add_argument("mqttPort", nargs='?', type=int, help="The port of the MQTT broker")
     parser.add_argument("mqttTopic", nargs='?', type=str, help="The base topic for MQTT (e.g., sensors)")
+    parser.add_argument("dbURL", nargs='?', type=str, help="URL of DB for direct connection")
     args = parser.parse_args()
     
-    main(args.baseUrl, args.mqttBroker, args.mqttPort, args.mqttTopic)
+    main(args.baseUrl, args.mqttBroker, args.mqttPort, args.mqttTopic, args.dbURL)

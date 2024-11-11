@@ -1,12 +1,12 @@
 from typing import Tuple 
 from .sensors import SensorController
 from .motors.movements import MovementController
-from .connections import MqttController, APIController
+from .connections import MqttController, APIController, DBController
 
 
 def setupControllers(baseUrl: str, 
-                    mqttBroker: str=None, mqttPort: str=None, mqttTopic: str=None) -> \
-                Tuple[MovementController, SensorController, APIController, MqttController]:
+                    mqttBroker: str=None, mqttPort: str=None, mqttTopic: str=None, dbURL: str = None) -> \
+                Tuple[MovementController, SensorController, APIController, MqttController, DBController]:
     """Function to setup all controllers, to provide a configuration modify the thing the api returns
     when getting /config, the data of this endpoint is used to manage the configuration of the controllers
     baseUrl is mandatory any other Args are treated as optional
@@ -16,6 +16,7 @@ def setupControllers(baseUrl: str,
         mqttBroker (str, optional): Url of the mqtt broker. Defaults to None.
         mqttPort (str, optional): Port of the mqtt broker. Defaults to None.
         mqttTopic (str, optional): Topic for mqtt publish. Defaults to None.
+        dbURL   (str, optional): dbURL to connect to. 
 
     Raises:
         ConnectionError: When the provided info by API is no enough
@@ -27,6 +28,8 @@ def setupControllers(baseUrl: str,
     
     config: dict = apiC.getData("config")
     
+
+
     motor = MovementController()
     sensors = SensorController()
 
@@ -46,4 +49,18 @@ def setupControllers(baseUrl: str,
     else: 
         mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
 
-    return [motor, sensors, apiC, mqttC]
+    # URL Direct Conection
+    if not dbURL:
+        print(f"Using dbURL provided by API <- No DB config URL provided")
+        dbURL = config.get("sql", None)
+
+        if dbURL:
+            dbC = DBController(dbURL)
+        else:
+            raise ConnectionError("Error fetching config from API, may be broken")
+    else:
+        dbC = DBController(dbURL)
+
+
+
+    return [motor, sensors, apiC, mqttC, dbC]
