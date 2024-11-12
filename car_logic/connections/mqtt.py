@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-
+import json
 
 class MqttController: 
 
@@ -47,7 +47,7 @@ class MqttController:
             return {"error": "Sensor non existant"}
         
         # Try publishing
-        result = self.client.publish(self.topics[sensor], payload=str(data))
+        result = self.client.publish(self.topics[sensor], payload=str(json.dumps(data)) # Before Publishing it serialize it to a json format
         if result.rc == mqtt.MQTT_ERR_SUCCESS:
             print(f"Data sent to MQTT topic {self.topics[sensor]} successfully.")
             return result
