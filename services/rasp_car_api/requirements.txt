@@ -5,5 +5,5 @@ pydantic
 python-dotenv
 pymysql
 cryptography
+
 paho-mqtt
-dotenv

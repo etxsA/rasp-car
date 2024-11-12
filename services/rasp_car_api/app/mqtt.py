@@ -1,26 +1,29 @@
-# Implementation of MQTT server to be runned in thread
-# Concurrently insert to the database. 
-import threading
+# Implementation of MQTT server to be runned when the api starts
+# Concurrently insert to the database.
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 import json
 import paho.mqtt.client as mqtt
-from .database import get_db
-from . import schemas
-from . import crud
-from .routers.config import configuration 
+
+from app.database import get_db
+from app import schemas
+from app import crud
+from app.routers import config
 
 # MQTT configuration
-MQTT = configuration.get("MQTT", None)
-MQTT_BROKER = configuration[""] 
-MQTT_PORT = 1883
-baseTopic = "your/base/topic"
+MQTT = config.configuration.get("mqtt")
+mqttBroker = MQTT.get("broker")
+mqttPort = MQTT.get("port")
+baseTopic = MQTT.get("topic")
 
 # Define the topics for each sensor
-SENSOR_TOPICS = {
+sensorTopics = {
     "lightSensor": f"{baseTopic}/photoresistor",
     "accelerometer": f"{baseTopic}/accelerometer",
     "environmentSensor": f"{baseTopic}/pressure",
-    "distanceSensor": f"{baseTopic}/distance"
+    "distanceSensor": f"{baseTopic}/distance",
 }
+
 
 # MQTT on_message callback
 def on_message(client, userdata, message):
@@ -37,51 +40,55 @@ def on_message(client, userdata, message):
     # Create a new database session
     db = next(get_db())
 
+    topic = message.topic
     # Route the message to the appropriate CRUD function based on topic
-    if message.topic == SENSOR_TOPICS["lightSensor"]:
-        # Create an instance of PhotoresistorCreate from data
+    if topic == sensorTopics["lightSensor"]:
         photoresistor_data = schemas.PhotoresistorCreate(**data)
         crud.create_photoresistor(db, photoresistor_data)
-    elif message.topic == SENSOR_TOPICS["accelerometer"]:
-        # Assuming you have a schema for Accelerometer
+        print(f"MQTT:\t  OK Insertion {topic}")  
+
+    elif topic == sensorTopics["accelerometer"]:
         accelerometer_data = schemas.AccelerometerCreate(**data)
         crud.create_accelerometer(db, accelerometer_data)
-    elif message.topic == SENSOR_TOPICS["environmentSensor"]:
-        # Assuming you have a schema for Pressure
+        print(f"MQTT:\t  OK Insertion {topic}")  
+
+    elif topic == sensorTopics["environmentSensor"]:
         pressure_data = schemas.PressureCreate(**data)
         crud.create_pressure(db, pressure_data)
-    elif message.topic == SENSOR_TOPICS["distanceSensor"]:
-        # Assuming you have a schema for Distance
+        print(f"MQTT:\t  OK Insertion {topic}")  
+
+    elif topic == sensorTopics["distanceSensor"]:
         distance_data = schemas.DistanceCreate(**data)
         crud.create_distance(db, distance_data)
-    else:
-        print("Unknown topic:", message.topic)
+        print(f"MQTT:\t  OK Insertion {topic}")  
 
+    else:
+        print("Unknown topic:", topic)
     # Close the database session
     db.close()
 
-# MQTT subscriber setup
-def start_mqtt():
+
+# Lifespan context manager to start and stop MQTT
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start MQTT client
     client = mqtt.Client()
     client.on_message = on_message
+    client.connect(mqttBroker, mqttPort, 60)
 
-    # Connect to the broker
-    client.connect(MQTT_BROKER, MQTT_PORT, 60)
-
-    # Subscribe to each sensor topic
-    for topic in SENSOR_TOPICS.values():
+    # Subscribe to sensor topics
+    for topic in sensorTopics.values():
         client.subscribe(topic)
 
-    # Start the MQTT client loop
-    client.loop_forever()
+    # Start MQTT loop in a separate thread
+    client.loop_start()
+    print(f"MQTT:\t  MQTT client started listening in main topic: {baseTopic}")
+    print(f"MQTT:\t  Using broker: {mqttBroker}:{mqttPort}")
 
-# Run MQTT in a background thread
-def start_mqtt_in_background():
-    mqtt_thread = threading.Thread(target=start_mqtt)
-    mqtt_thread.daemon = True
-    mqtt_thread.start()
-
-@app.on_event("startup")
-def startup_event():
-    print("Starting MQTT subscriber...")
-    start_mqtt_in_background()
+    try:
+        yield
+    finally:
+        # Stop MQTT client on shutdown
+        client.loop_stop()
+        client.disconnect()
+        print(f"MQTT:\t  MQTT client stopped")

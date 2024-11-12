@@ -5,8 +5,10 @@ from fastapi import FastAPI
 from app import models
 from app.routers import photoresistor, accelerometer, distance, pressure, config
 from app.database import engine
+from app.mqtt import lifespan
 
-app = FastAPI()
+#Add lifespan to run mqtt server
+app = FastAPI(lifespan=lifespan)
 
 # Create the database tables
 models.Base.metadata.create_all(bind=engine)
@@ -20,11 +22,6 @@ app.include_router(pressure.router)
 # Configuration endpoint 
 app.include_router(config.router)
 
-# MQTT Setup
-@app.on_event("startup")
-def startup_event():
-    print("Starting MQTT subscriber...")
-    start_mqtt_in_background()
 
 @app.get("/")
 def read_root():
