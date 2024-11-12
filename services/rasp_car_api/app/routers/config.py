@@ -1,5 +1,6 @@
 # Implementation of route to send API
 # main/routers/pressure.py
+import os 
 from fastapi import APIRouter, Depends, HTTPException
 from app import schemas
 
@@ -10,11 +11,12 @@ configuration = {
     # motor : {},
     # sensor : {},
     "mqtt": {
-        "broker": "broker.hivemq.com",
-        "port" :  1883,
-        "topic": "equipo3",
+        "broker": os.getenv("MQTT_BROKER", "broker.hivemq.com"),
+        "port" :  os.getenv("MQTT_PORT", 1883),
+        "topic": os.getenv("MQTT_TOPIC", "defTopic"),
     },
-    "sql": "mysql+pymysql://user:123eq3rtu@10.48.229.221:3306/Sensors",
+    "sql": os.getenv("SQL_URL", "mysql+pymysql://root:toor123@10.48.229.221:3306/Sensors"),
+    
 }
 
 @router.get("/config/", response_model=schemas.RaspConfig)
