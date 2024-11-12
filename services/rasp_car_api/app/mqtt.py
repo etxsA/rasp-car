@@ -1,3 +1,5 @@
+# Implementation of MQTT server to be runned in thread
+# Concurrently insert to the database. 
 import threading
 import json
 import paho.mqtt.client as mqtt
@@ -7,7 +9,8 @@ from . import crud
 from .routers.config import configuration 
 
 # MQTT configuration
-MQTT_BROKER = "your_mqtt_broker_address" 
+MQTT = configuration.get("MQTT", None)
+MQTT_BROKER = configuration[""] 
 MQTT_PORT = 1883
 baseTopic = "your/base/topic"
 
