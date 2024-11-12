@@ -20,6 +20,11 @@ app.include_router(pressure.router)
 # Configuration endpoint 
 app.include_router(config.router)
 
+# MQTT Setup
+@app.on_event("startup")
+def startup_event():
+    print("Starting MQTT subscriber...")
+    start_mqtt_in_background()
 
 @app.get("/")
 def read_root():
