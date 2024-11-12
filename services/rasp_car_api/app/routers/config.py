@@ -16,7 +16,6 @@ configuration = {
         "topic": os.getenv("MQTT_TOPIC", "defTopic"),
     },
     "sql": os.getenv("SQL_URL", "mysql+pymysql://root:toor123@10.48.229.221:3306/Sensors"),
-    
 }
 
 @router.get("/config/", response_model=schemas.RaspConfig)
