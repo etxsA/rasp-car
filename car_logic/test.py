@@ -100,7 +100,7 @@ def controlMqtt(mqttC, sensors):
             mqttC.sendData(envData, "environmentSensor")
         elif mqttChoice == '4':
             distData = sensors.readDistanceSensor()
-            mqttC.sendData(distData, "distance")
+            mqttC.sendData(distData, "distanceSensor")
         elif mqttChoice == '5':
             # Send all sensor data to MQTT
             allData = sensors.readAllSensors()
