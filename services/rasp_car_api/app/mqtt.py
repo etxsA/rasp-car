@@ -27,12 +27,12 @@ sensorTopics = {
 
 # MQTT on_message callback
 def on_message(client, userdata, message):
-    payload = message.payload.decode()
+    payload:str = message.payload.decode()
     print(f"Received MQTT message: {payload} on topic: {message.topic}")
 
     # Parse payload as JSON string to dict
     try:
-        data = json.loads(payload)
+        data = json.loads(payload.replace("'", '"'))
     except json.JSONDecodeError as e:
         print("Error parsing MQTT message:", e)
         return
