@@ -1,6 +1,6 @@
 # Database Connection and Setup with SQLAlchemy
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.orm import sessionmaker
 from . import models
 from .models import get_utc_now
 
