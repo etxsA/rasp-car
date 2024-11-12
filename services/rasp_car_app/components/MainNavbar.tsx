@@ -1,4 +1,6 @@
 // component/MainNavbar.tsx
+import Link from "next/link";
+
 export default function MainNavbar() {
 
     return (
@@ -33,13 +35,23 @@ export default function MainNavbar() {
                         <circle cx="29" cy="32.3762" r="4.5" stroke="white"/>
                     </svg>
 
-                    <h1>Rasp-Car</h1>
+                    {/* Links Container */}
+                    <div className="ml-auto flex gap-4">
+                        <Link href="/" className="text-white">
+                            Rasp-Car
+                        </Link>
+                        <Link href="/dashboard" className="text-white">
+                            Dashboard
+                        </Link>
+                        <Link href="/dashboard" className="text-white">
+                            Acelerometer
+                        </Link>
+                        <Link href="/dashboard" className="text-white">
+                            Temperature
+                        </Link>
+                    </div>
 
                 </div>
-
-                {/* Links Container*/}
-                <div>
-                </div> 
             </div>
         </nav>
     );
