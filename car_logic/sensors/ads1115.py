@@ -118,3 +118,4 @@ class ADS1115:
         Destructor to clean up the I2C bus when the object is deleted.
         """
         self.bus.close()
+
