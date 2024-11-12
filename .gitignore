@@ -36,3 +36,4 @@ pyenv
 Vagrantfile
 
 # env
+.env
