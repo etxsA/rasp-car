@@ -20,8 +20,12 @@ def create_photoresistor(db: Session, photoresistor: schemas.PhotoresistorCreate
 def get_photoresistor(db: Session, photoresistor_id: int):
     return db.query(models.Photoresistor).filter(models.Photoresistor.id == photoresistor_id).first()
 
-def get_photoresistors(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Photoresistor).offset(skip).limit(limit).all()
+def get_photoresistors(db: Session, skip: int = 0, limit: int = 10, min_voltage: float = None):
+    print(f"Filtering with min_voltage: {min_voltage}") 
+    query = db.query(models.Photoresistor)
+    if min_voltage is not None:
+        query = query.filter(models.Photoresistor.voltage > min_voltage)
+    return query.offset(skip).limit(limit).all()
 
 def delete_photoresistor(db: Session, photoresistor_id: int):
     db_photoresistor = get_photoresistor(db, photoresistor_id)
