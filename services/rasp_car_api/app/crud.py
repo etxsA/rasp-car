@@ -24,7 +24,7 @@ def get_photoresistors(db: Session, skip: int = 0, limit: int = 10, min_voltage:
     print(f"Filtering with min_voltage: {min_voltage}") 
     query = db.query(models.Photoresistor)
     if min_voltage is not None:
-        query = query.filter(models.Photoresistor.voltage > min_voltage)
+        query = query.filter(models.Photoresistor.voltage >= min_voltage)
     return query.offset(skip).limit(limit).all()
 
 def delete_photoresistor(db: Session, photoresistor_id: int):
