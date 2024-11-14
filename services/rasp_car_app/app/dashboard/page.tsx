@@ -33,7 +33,7 @@ export default function Dashboard() {
         console.error("Error fetching data:", error);
       });
   }, []);
-
+    
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-40 items-center">
       <MainNavbar />

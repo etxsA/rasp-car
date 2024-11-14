@@ -41,7 +41,7 @@ export default function MainNavbar() {
                             Rasp-Car
                         </Link>
                         <Link href="/dashboard" className="text-white">
-                            Photoresistor
+                            Dashboard
                         </Link>
                         <Link href="/dashboard" className="text-white">
                             Acelerometer
