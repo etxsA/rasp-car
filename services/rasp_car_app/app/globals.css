@@ -41,6 +41,7 @@ body {
 }
 
 @layer components {
+  /* Simple buttons */
   .linkButton  {
     @apply flex flex-row justify-center items-center p-1 font-normal
     italic text-sm/none text-white w-auto;
@@ -64,7 +65,15 @@ body {
     transition: all ease 100ms;
 
   }
+  /* For square icons*/
+  .square-icon-button {
+    @apply flex flex-row justify-center items-center p-2
+    bg-[--menuColor] border-[1px] border-[--borderWhite]
+    shadow-[2px_2px_4px_rgba(0,0,0,0.20)] rounded-2xl
+  }
 
+
+    /* For multiple option menus*/
   .menu-box {
     @apply bg-[--menuColor] border-[1px] border-[--borderWhite] 
     shadow-[3px_3px_4px_rgba(220,220,220,0.3)] rounded-[2rem]
