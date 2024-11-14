@@ -1,6 +1,6 @@
 # Implementation of routes used for the photoresistor table. 
 # main/routers/photoresistor.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from .. import crud, schemas
 from ..database import get_db
@@ -21,8 +21,14 @@ def read_photoresistor(photoresistor_id: int, db: Session = Depends(get_db)):
     return db_photoresistor
 
 @router.get("/photoresistor/", response_model=list[schemas.Photoresistor])
-def read_photoresistors(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_photoresistors(db=db, skip=skip, limit=limit)
+def read_photoresistors(
+    skip: int = 0,
+    limit: int = 10,
+    min_voltage: float = Query(None, description="Minimum voltage to filter results"),
+    db: Session = Depends(get_db)
+):
+    return crud.get_photoresistors(db=db, skip=skip, limit=limit, min_voltage=min_voltage)
+
 
 @router.delete("/photoresistor/{photoresistor_id}", response_model=schemas.Photoresistor)
 def delete_photoresistor(photoresistor_id: int, db: Session = Depends(get_db)):

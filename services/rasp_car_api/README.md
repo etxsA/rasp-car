@@ -21,7 +21,7 @@ A simple fastapi implementation serving as bridge between our car and the databa
 To execute any of the code , ensure you are running on a python virtual environment (venv). If no, create one and use it from the termimal: 
 ```bash
 python3 -m venv rasp_car_api
-source rasp-car/bin/activate
+source rasp_car_api/bin/activate
 ```
 
 If you need to get out of the venv, just use __deactivate__
