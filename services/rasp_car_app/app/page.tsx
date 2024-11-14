@@ -1,5 +1,6 @@
 import MainNavbar from "@/components/MainNavbar";
 import Chart from "@/components/Chart";
+import SquareIconButton from "@/components/SquareIconButton";
 
 
 const data1 = [
@@ -101,10 +102,12 @@ export default function Home() {
       
       
       {/* Contenedor Botones Fondo*/}
-      <div className="w-full h h-fit flex md:flex-row flex-wrap md:justify-between items-center sm:flex-col sm:justify-start">
+      <div className="mt-10 w-full h h-fit flex md:flex-row flex-wrap md:justify-between items-center sm:flex-col sm:justify-start">
+        <SquareIconButton type='info' href="/info" width={100} height={100} />
+        <SquareIconButton type='refresh' href="/controller" width={100} height={100} />
+        <SquareIconButton type='controller' href="/controller" width={100} height={100} />
 
       </div>
-      <h1>HOLI</h1>
     </div>
   );
 }

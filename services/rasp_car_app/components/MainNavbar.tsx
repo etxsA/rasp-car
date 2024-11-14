@@ -16,16 +16,16 @@ export default function MainNavbar() {
 
                 {/* Links Container */}
                 <div className="flex flex-row flex-wrap gap-4 md:justify-center md:items-center sm:items-center sm:justify-start">
-                    <LinkButton href="/photoresistor">
+                    <LinkButton href="/dashboard?s=photoresistor">
                         Photoresistor
                     </LinkButton> 
-                    <LinkButton href="/accelerometer">
+                    <LinkButton href="/dashboard?s=accelerometer">
                         Accelerometer
                     </LinkButton>
-                    <LinkButton href="/distance">
+                    <LinkButton href="/dashboard?s=distance">
                         Distance
                     </LinkButton>
-                    <LinkButton href="/pressure">
+                    <LinkButton href="/dashboard?s=pressure">
                         Pressure
                     </LinkButton>  
                 </div>
