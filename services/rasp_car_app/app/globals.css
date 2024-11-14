@@ -12,6 +12,11 @@
   --background: #ffffff;
   --foreground: #171717;
   --navColor: #1F0606;
+  --menuColor: #1E1E1E;
+  --borderWhite: #DCDCDC;
+  --green: #57A649;
+  --yellow: #D6DF32;
+  --red: #D57665;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,4 +38,62 @@ body {
 
 .bg-gradient-right {
   background: linear-gradient(270deg, rgba(30, 30, 30, 0) 1.45%, #0E0C15 99.15%);
+}
+
+@layer components {
+  .linkButton  {
+    @apply flex flex-row justify-center items-center p-1 font-normal
+    italic text-sm/none text-white w-auto;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #181818;
+    border: 0.08px solid #000000;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+  }
+
+  .linkButton:hover {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), rgba(48, 48, 48, 0.266667);
+    border: 0.08px solid #383636;
+    box-shadow: 5px 2px 4px rgba(220, 220, 220, 0.25);
+    transform: translateY(-2px);
+    transition: all ease-in 100ms;
+  }
+  .linkButton:focus {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), rgba(56, 54, 54, 0.266667);
+    border: 0.08px solid #383636;
+    box-shadow: inset 2px 2px 4px rgba(220, 220, 220, 0.25);
+    transition: all ease 100ms;
+
+  }
+
+  .menu-box {
+    @apply bg-[--menuColor] border-[1px] border-[--borderWhite] 
+    shadow-[3px_3px_4px_rgba(220,220,220,0.3)] rounded-[2rem]
+    flex md:flex-row flex-wrap justify-between items-start p-2
+    gap-8 sm:flex-col
+  }
+
+  .status {
+    @apply flex flex-col items-start justify-start px-3 gap-0.5
+  }
+
+  .status h1 {
+    @apply bg-clip-text text-lg/none font-extrabold font-source-code-pro w-full text-center
+    px-3;
+    -webkit-text-fill-color:  transparent;
+    text-fill-color: transparent;
+
+  }
+
+  .status p {
+    @apply min-h-3 italic font-normal text-sm/none text-white; 
+  }
+
+}
+
+/* Main Title */
+.rasp-car {
+  @apply font-extrabold text-2xl/[1.2] leading-[1.2] text-transparent;
+  background: linear-gradient(90deg, #dcdcdc 0%, #ff0000 74%, #ff0000 100%);
+  background-clip: text;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }

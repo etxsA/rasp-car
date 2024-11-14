@@ -20,8 +20,10 @@ export default function RootLayout({
         className={`font-source-code-pro antialiased mx-0 flex flex-row flex-nowrap justify-between`}
       >
         {/* Background Container */}
-        <div className="absolute w-full h-screen overflow-hidden -z-10">
-          <div className="bg-gradient-right w-1/4 h-dvh absolute left-0 -z-10"></div>
+        <div className="fixed w-full h-screen overflow-hidden -z-10 top-0 left-0">
+          {/* Left Container */}
+          <div className="bg-gradient-left w-1/4 h-full fixed right-0 -z-10"></div>
+          {/* Bg Vector */}
           <div className="flex items-center justify-center h-screen absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <svg className=" max-w-md md:max-w-lg lg:max-w-xl aspect-[1082/910]" width="1082" height="910" viewBox="0 0 1082 910" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.2">
@@ -46,8 +48,9 @@ export default function RootLayout({
               </svg>
 
           </div>
-          <div className="bg-gradient-left w-1/4 h-dvh absolute right-0 -z-10"></div>
-
+          {/* Right Container */}
+          <div className="bg-gradient-right w-1/4 h-full fixed left-0 -z-10"></div>
+          
         </div>
         {children}
       </body>
