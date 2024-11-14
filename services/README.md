@@ -12,5 +12,5 @@ The second service is the fastapi, an implementation in python that serves as a 
   - [**`📂 rasp_car_api/`**:](/services/rasp_car_api/)
       Contains a simple FastAPI implementation that acts as a bridge between a car and a database server. It provides various API endpoints to interact with car data.
   - [**`📂 rasp_car_app/`**:](/services/rasp_car_app/)
-      Typescript-based app which displays sensor readings in a visual way.
+      App built with Typescript and NEXT which displays sensor readings in a visual way.
 
