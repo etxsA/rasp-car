@@ -26,19 +26,23 @@ export default function Home() {
     <div className="h-screen w-screen flex flex-col flex-nowrap gap-5 py-5 px-40 justify-start items-center" >
       <MainNavbar />
       {/* Contenedor de las dos primeras gráficas */}
-      <div className="flex flex-row gap-4 w-full">
-        <div className="w-1/2">
+      <div className="flex flex-row flex-wrap justify-center items-center gap-4 w-full">
+        <div className="w-1/5">
           <Chart data={data1} />
         </div>
-        <div className="w-1/2">
+        <div className="w-1/5">
           <Chart data={data2} />
+        </div>
+        <div className="w-1/5">
+          <Chart data={data1} />
+        </div>
+        <div className="w-1/5">
+          <Chart data={data1} />
         </div>
       </div>
 
       {/* Gráfica adicional debajo */}
-      <div className="w-3/4 mt-5">
-        <Chart data={data1} />
-      </div>
+    
       <h1>HOLI</h1>
     </div>
   );
