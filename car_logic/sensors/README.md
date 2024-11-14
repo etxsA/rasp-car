@@ -1,12 +1,18 @@
 # Description
 
 ## SETUP 
-To work with each one of the sensors, you need to install a specific package, in this case we use primarly the adafruit library, below is relation of each package according to the sensor. 
+Manually wrote a driver with no external dependencies for each sensor. below is the relation of each package according to the sensor. .
 
-|Sensor|Used Package|
+|Sensor|Used Driver|
 |---|---|
-|BME/BMP-280 | adafruit-circuitpython-bmp280 / adafruit-circuitpython-bme280|
+|BME/BMP-280 | bmp280.py |
+|ADS - 1115 | ads1115.py |
+|ADXL - 345 | adxl345.py |
+|Ultrasonic | ultrasonic.py|
 | ||
+
+## sense.py
+This file contains a class designed to manage each sensor. The class provides methods to initialize these sensors, read data from each sensor, and combine the readings into a single dictionary. It also ensures proper cleanup of resources when the object is destroyed.
 
 _* All of the packages are listed in the project requirements_
 ```bash
