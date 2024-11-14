@@ -20,6 +20,18 @@ pip3 install -r requirements.txt
 
 Now you can run any part of the code, ensure you read the documentation provided in every part and in the code.
 
+## Run 
+
+To test the controllers and everything, use the test.py file, it is part of the module car_logic if you are running it from outside you can use:
+
+```bash
+python -m car_logic.test
+```
+If you are running it from car_logic folder user: 
+```bash
+python -m test
+```
+
 ## File Descriptions
 
 ### Connections
