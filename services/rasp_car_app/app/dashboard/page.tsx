@@ -38,7 +38,7 @@ export default function Dashboard() {
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-40 items-center">
       <MainNavbar />
       <h1 className="font-bold">Dashboard</h1>
-      <div className="w-3/4">
+      <div style={{ width: "856px", height: "256px" }}>
         <Chart data={data} />
       </div>
     </div>
