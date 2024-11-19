@@ -22,7 +22,7 @@ def read_accelerometer(accelerometer_id: int, db: Session = Depends(get_db)):
     return db_accelerometer
 
 @router.get("/accelerometer/", response_model=list[schemas.Accelerometer])
-def read_photoresistors(
+def read_accelerometers(
     skip: int = 0,
     limit: int = 10,
     min_x: float = Query(None, description="Minimum x to filter results"),

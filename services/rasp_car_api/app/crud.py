@@ -104,8 +104,20 @@ def create_distance(db: Session, distance: schemas.DistanceCreate):
 def get_distance(db: Session, distance_id: int):
     return db.query(models.Distance).filter(models.Distance.id == distance_id).first()
 
-def get_distances(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Distance).offset(skip).limit(limit).all()
+def get_distances(db: Session, skip: int = 0, limit: int = 10, min_distance: float = None, start_date: str = None, end_date: str = None):
+    query = db.query(models.Distance)
+
+    if start_date:
+        query = query.filter(models.Distance.timestamp >= start_date)
+    
+    if end_date:
+        query = query.filter(models.Distance.timestamp <= end_date)
+
+    if min_distance: 
+        query = query.filter(models.Distance.distance >= min_distance)
+    
+    return query.offset(skip).limit(limit).all()
+
 
 def delete_distance(db: Session, distance_id: int):
     db_distance = get_distance(db, distance_id)
@@ -130,8 +142,26 @@ def create_pressure(db: Session, pressure: schemas.PressureCreate):
 def get_pressure(db: Session, pressure_id: int):
     return db.query(models.Pressure).filter(models.Pressure.id == pressure_id).first()
 
-def get_pressures(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Pressure).offset(skip).limit(limit).all()
+def get_pressures(db: Session, skip: int = 0, limit: int = 10, start_date: str = None, end_date: str = None, min_temperature: float = None, min_pressure: float = None, min_altitude: float = None):
+    query = db.query(models.Pressure)
+
+    if start_date:
+        query = query.filter(models.Pressure.timestamp >= start_date)
+    
+    if end_date:
+        query = query.filter(models.Pressure.timestamp <= end_date)
+
+    if min_altitude:
+        query = query.filter(models.Pressure.altitude >= min_altitude)
+
+    if min_pressure:
+        query = query.filter(models.Pressure.pressure >= min_pressure)
+
+    if min_temperature:
+        query = query.filter(models.Pressure.temperature >= min_temperature)
+
+    return query.offset(skip).limit(limit).all()
+
 
 def delete_pressure(db: Session, pressure_id: int):
     db_pressure = get_pressure(db, pressure_id)
