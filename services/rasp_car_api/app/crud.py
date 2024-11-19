@@ -27,7 +27,7 @@ def get_photoresistors(db: Session, skip: int = 0, limit: int = 10, min_voltage:
     # Start building the query
     query = db.query(models.Photoresistor)
 
-    if min_voltage is not None:
+    if min_voltage:
         query = query.filter(models.Photoresistor.voltage >= min_voltage)
     
     if start_date:
@@ -63,8 +63,25 @@ def create_accelerometer(db: Session, accelerometer: schemas.AccelerometerCreate
 def get_accelerometer(db: Session, accelerometer_id: int):
     return db.query(models.Accelerometer).filter(models.Accelerometer.id == accelerometer_id).first()
 
-def get_accelerometers(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Accelerometer).offset(skip).limit(limit).all()
+def get_accelerometers(db: Session, skip: int = 0, limit: int = 10, start_date: str = None, end_date: str = None, min_x: float = None, min_y: float = None, min_z: float = None):
+    query = db.query(models.Accelerometer)
+
+    if start_date:
+        query = query.filter(models.Accelerometer.timestamp >= start_date)
+    
+    if end_date:
+        query = query.filter(models.Accelerometer.timestamp <= end_date)
+
+    if min_x:
+        query = query.filter(models.Accelerometer.x >= min_x)
+
+    if min_y:
+        query = query.filter(models.Accelerometer.x >= min_y)
+
+    if min_z:
+        query = query.filter(models.Accelerometer.x >= min_z)
+
+    return query.offset(skip).limit(limit).all()
 
 def delete_accelerometer(db: Session, accelerometer_id: int):
     db_accelerometer = get_accelerometer(db, accelerometer_id)
