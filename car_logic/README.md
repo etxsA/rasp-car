@@ -1,5 +1,7 @@
-# Rasp-Car
-A Raspberry pi 4b car, this is a project implementing the use of python to code and build a functioning car
+# Car Logic
+A python module, designed for the raspberry pi 4b, that controls all the logic to read sensor data, control motors, follow and send instructions by various protocols, mainly MQTT. 
+
+All drivers for sensors, where coded from scratch no external dependencies where used. 
 
 ## Code Requirements 
 To execute any of the code in the subfolders, ensure you are running on a python virtual environment (venv). If no, create one and use it from the termimal: 
@@ -22,15 +24,16 @@ Now you can run any part of the code, ensure you read the documentation provided
 
 ## Run 
 
-To test the controllers and everything, use the test.py file, it is part of the module car_logic if you are running it from outside you can use:
+To test the controllers, sensors and the connections, use the test.py file, it is part of the module car_logic if you are running it from the parent folder:
 
 ```bash
-python -m car_logic.test
+python -m car_logic.test [params]
 ```
 If you are running it from car_logic folder user: 
 ```bash
-python -m test
+python -m test [params]
 ```
+### Params
 
 ## File Descriptions
 
