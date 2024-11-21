@@ -31,8 +31,13 @@ There is a car that sends data over MQTT to a database, there is a web page desi
 
 ## Prototype
 The first prototype was developed in an acrylic car kit; the circuit part was prototyped in 2 mini protoboards, all circuits descriptions are described in the [Car Logic Section](/car_logic/). 
-
 ![Photo of prototype](/assets/rasp_car.jpg)
+
+### Circuit
+The following circuit is used to make all the car work:
+![Circuit](/assets/Prototype.png)
+To see details and see separate versions for [**sensors**](/car_logic/sensors/README.md#how-to-wire-it-up) and [**motors**](/car_logic/motors/README.md#how-to-wire-it-up) visit the [**`car_logic`**](/car_logic/) subfolder, where all the implementation of techonologies for the car are descripted. 
+
 ## Directory
 - **`📂 /`**: Container for all project
   -  [**`📂 car_logic/`**:](/car_logic)

@@ -22,6 +22,9 @@ pip3 install -r requirements.txt
 
 Now you can run any part of the code, ensure you read the documentation provided in every part and in the code.
 
+## How to wire it up
+![Schematic](../assets/Prototype.png)
+To see specifics of each part, refer to [**sensor**](./sensors/README.md#how-to-wire-it-up) and for motor refer to [**motors**](./motors/README.md#how-to-wire-it-up).
 
 
 ## Run 
