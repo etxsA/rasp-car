@@ -104,7 +104,7 @@ export default function Home() {
       {/* Contenedor Botones Fondo*/}
       <div className="mt-10 w-full h h-fit flex md:flex-row flex-wrap md:justify-between items-center sm:flex-col sm:justify-start">
         <SquareIconButton type='info' href="/info" width={100} height={100} />
-        <SquareIconButton type='refresh' href="/controller" width={100} height={100} />
+        <SquareIconButton type='refresh' href="/refresh" width={100} height={100} />
         <SquareIconButton type='controller' href="/controller" width={100} height={100} />
 
       </div>
