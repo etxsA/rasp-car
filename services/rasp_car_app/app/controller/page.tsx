@@ -17,11 +17,12 @@ export default function DevelopmentPage() {
   const startCounting = (direction: string) => {
     // Start incrementing the counter
     handleNavigation(direction);
-    const id = setInterval(() => {
-      setCounter((prev) => prev + 1);
-      console.log(`Count: ${counter}`);
-    }, 100); // Adjust interval for faster/slower increment
-    setIntervalId(id);
+    if (!intervalId) {
+      const id = setInterval(() => {
+        setCounter((prev) => prev + 1); // Use functional update for the correct counter value
+      }, 100); // Adjust interval for faster/slower increment
+      setIntervalId(id);
+    }
   };
 
   const stopCounting = () => {
@@ -65,7 +66,7 @@ export default function DevelopmentPage() {
       window.removeEventListener("keydown", handleKeyPress);
       window.removeEventListener("keyup", handleKeyRelease);
     };
-  }, []);
+  }, [intervalId]); // Depend on intervalId to ensure proper cleanup
 
   return (
     <div className="h-screen w-screen flex flex-col items-center">
