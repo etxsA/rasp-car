@@ -1,7 +1,8 @@
 # Description
 
 ## SETUP 
-Manually wrote a driver with no external dependencies for each sensor. below is the relation of each package according to the sensor. .
+
+There is a a Driver for each sensor, each driver is written in a minimal way just to be able to read the requiered data used in the project, below is listed the sensor and the corresponding driver for each sensor. 
 
 |Sensor|Used Driver|
 |---|---|
@@ -11,62 +12,53 @@ Manually wrote a driver with no external dependencies for each sensor. below is 
 |Ultrasonic | ultrasonic.py|
 | ||
 
-## sense.py
-This file contains a class designed to manage each sensor. The class provides methods to initialize these sensors, read data from each sensor, and combine the readings into a single dictionary. It also ensures proper cleanup of resources when the object is destroyed.
+### sense.py
+This file contains a [class](#sensorcontroller) designed to manage each sensor. The class provides methods to initialize these sensors, read data from each sensor, and combine the readings into a single dictionary. It also ensures proper cleanup of resources when the object is destroyed.
+- To manage each sensor, uses the drivers listed on the table. 
 
-_* All of the packages are listed in the project requirements_
-```bash
-pip3 install RPi.GPIO
-```
+* All of the packages are listed in the parent folder under requierements.txt
 
 ## How to wire it up 
-![Schematic](./sketch.png)
-This is an example view, not strictly needed. You can use the pins as you wish. The showed layout is already declared as default.
+![Schematic](../../assets/SensorsCircuit.png)
+This is an example view, you don't need to stricly reproduce it this way. You can use the pins as you wish. The showed layout is already declared as default.
 
-- ENA -> 32 (GPIO12)
-- IN1 -> 35 (GPIO19)
-- IN2 -> 37 (GPIO26)
-- ENB -> 40 (GPIO21)
-- IN3 -> 36 (GPIO16)
-- IN4 -> 38 (GPIO20)
+- All SDA -> 3 (SDA)
+- All SCL -> 5 (SCL)
+- ULtrasonic Trig ->  16 (GPIO23)
+- Voltage Divider -> 18 (GPIO24)
 
-The class __MovementController__ declared in _movements.py_ sets the pins, in case you chose other, specify them to the constructor: 
-```python 
-def __init__(self,
-                  ENA:int=32, IN1:int=35, IN2:int=37,
-                  ENB:int=40, IN3:int=36, IN4:int=38, p:bool=True) -> None:
-```
+[!NOTE] Ultrasonic Sensor should be connected to 5v and the rest of the sensors should be connected to 3.3v
 
 ## Usage
+### SensorController
 
-The class __MovementController__ provides with methods for modifying the movements of the motor, as listed below:
-- __foward()__: Foward movement
-- __backwards()__: Backwards movement
-- __right()__: right turn movement
-- __left()__: left turn movement
-- __spinRight()__: right spin movement
-- __spinLeft()__: left spin movement
-- __stop()__: Stop all motor movement
+The class **`SensorController`**, found in [**sense.py**](./sense.py),provides methods for interacting with various sensors, as listed below:
 
-All of the movement functions can take time as an optional parameter, to specify wait time after executing the movement, __default = 0.5s__
+- **`readLightSensor()`**: Reads data from the light sensor (ADS1115).
+- **`readAccelerometer()`**: Reads data from the accelerometer (ADXL345), including x, y, z axis acceleration and events.
+- **`readEnvironmentSensor()`**: Reads data from the environmental sensor (BMP280), including temperature, pressure, and altitude.
+- **`readDistanceSensor()`**: Reads data from the Ultrasonic distance sensor.
+- **`readAllSensors()`**: Reads data from all sensors and combines it into a single dictionary.
+
+Below is a sample implementation of this controller
 
 ```python
-move = MovementController()
-move.foward(1) # 1 Second wait
+sense = SensorController()
+print(sense.readAllSensors())
 ```
-When performing a movement, the action will be printed by default: 
-```
->
-Moving Foward
-```
-To prevent the behaviour, when creating an object of the controller, set the default parameter __p to False__
+This will print all sensor data. 
 
 ## Testing 
 Follow any previous setup and run the _test.py_ script
 
 ```bash
-> python test.py
+python -m test
 ```
-
-
-
+Alternatively you can run the test from parent directory by: 
+```bash
+python -m sensors.test
+```
+Or from outside the car_logic module:
+```bash
+python -m car_logic.sensors.test
+```

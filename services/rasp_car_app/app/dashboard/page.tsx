@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  // Function to fetch data with the given parameters
   const fetchData = () => {
     const params: any = { skip, limit };
     if (minVoltage !== undefined) params.min_voltage = minVoltage;
@@ -40,11 +41,12 @@ export default function Dashboard() {
       });
   };
 
+  // Handle form submission
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     fetchData();
   };
-
+  
   // Fetch data on component mount (onAppear equivalent)
   useEffect(() => {
     fetchData();
@@ -56,7 +58,7 @@ export default function Dashboard() {
 
     return () => clearInterval(intervalId);
   }, [skip, limit, minVoltage]); 
-
+   
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-10 items-center">
       <MainNavbar />
