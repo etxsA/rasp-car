@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainNavbar from "@/components/MainNavbar";
-import AreaChartComponent2 from "@/components/DoubleLineChart";
+import AreaChartComponent from "@/components/AreaChart1";
 
 interface SensorData {
   temperature: number;
@@ -55,11 +55,11 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchData(); // Fetch data on mount
+    fetchData();
     const intervalId = setInterval(() => {
       fetchData();
-    }, 10000); // Fetch data every 60 seconds
-    return () => clearInterval(intervalId); // Cleanup interval on unmount
+    }, 10000);
+    return () => clearInterval(intervalId);
   }, [skip, limit, minTemperature, minPressure, minAltitude]);
 
   return (
@@ -76,8 +76,14 @@ export default function Dashboard() {
             padding: "20px",
           }}
         >
-          <div style={{ width: "90%", height: "90%" }}>
-            <AreaChartComponent2 data={data} />
+          <div style={{ width: "47%", height: "40%" }}>
+            <AreaChartComponent data={data} dataKey="temperature" color="#700018" />
+          </div>
+          <div style={{ width: "47%", height: "40%" }}>
+            <AreaChartComponent data={data} dataKey="pressure" color="#b6042a" />
+          </div>
+          <div style={{ width: "90%", height: "50%" }}>
+            <AreaChartComponent data={data} dataKey="altitude" color="#f50538" />
           </div>
         </div>
 
