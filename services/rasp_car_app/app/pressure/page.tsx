@@ -45,18 +45,6 @@ export default function Dashboard() {
     fetchData();
   };
 
-  // Fetch data on component mount (onAppear equivalent)
-  useEffect(() => {
-    fetchData(); // Initial fetch on mount
-
-    // Set up periodic fetching every 20 seconds
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 60000); // 20,000 milliseconds = 20 seconds
-
-    return () => clearInterval(intervalId); // Clean up interval on unmount
-  }, []); 
-
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-10 items-center">
       <MainNavbar />
