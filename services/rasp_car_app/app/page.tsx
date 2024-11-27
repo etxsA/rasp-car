@@ -39,25 +39,6 @@ interface pressureData {
   id: number;
 }
 
-const data1 = [
-  { name: 'Jan', value: 30 },
-  { name: 'Feb', value: 20 },
-  { name: 'Mar', value: 50 },
-  { name: 'Apr', value: 40 },
-  { name: 'May', value: 80 },
-  { name: 'Jun', value: 70 },
-];
-
-const data2 = [
-  { name: 'Jan', value: 60 },
-  { name: 'Feb', value: 30 },
-  { name: 'Mar', value: 80 },
-  { name: 'Apr', value: 50 },
-  { name: 'May', value: 40 },
-  { name: 'Jun', value: 90 },
-];
-
-
 export default function Home() {
   const [dataPhotoresistor, setDataPhotoresistor] = useState<{ name: string; value: number }[]>([]);
   const [dataAccelerometer, setDataAccelerometer] = useState<{ name: string; x: number; y: number; z: number }[]>([]);
