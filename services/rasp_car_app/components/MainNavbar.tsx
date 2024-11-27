@@ -19,13 +19,13 @@ export default function MainNavbar() {
                     <LinkButton href="/dashboard?s=photoresistor">
                         Photoresistor
                     </LinkButton> 
-                    <LinkButton href="/dashboard?s=accelerometer">
+                    <LinkButton href="/accelerometer">
                         Accelerometer
                     </LinkButton>
-                    <LinkButton href="/dashboard?s=distance">
+                    <LinkButton href="/distance">
                         Distance
                     </LinkButton>
-                    <LinkButton href="/dashboard?s=pressure">
+                    <LinkButton href="/pressure">
                         Pressure
                     </LinkButton>  
                 </div>

@@ -3,35 +3,44 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainNavbar from "@/components/MainNavbar";
-import Chart from "@/components/Chart";
+import AreaChartComponent from "@/components/DoubleLineChart";
 
-interface PhotoresistorData {
-  voltage: number;
-  lightLevel: number;
+interface SensorData {
+  temperature: number;
+  pressure: number;
+  altitude: number;
   timestamp: string;
   id: number;
 }
 
 export default function Dashboard() {
-  const [data, setData] = useState<{ name: string; value: number }[]>([]);
+  const [data, setData] = useState<
+    { name: string; temperature: number; pressure: number; altitude: number }[]
+  >([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [minVoltage, setMinVoltage] = useState<number | undefined>();
+  const [minTemperature, setMinTemperature] = useState<number | undefined>();
+  const [minPressure, setMinPressure] = useState<number | undefined>();
+  const [minAltitude, setMinAltitude] = useState<number | undefined>();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const fetchData = () => {
     const params: any = { skip, limit };
-    if (minVoltage !== undefined) params.min_voltage = minVoltage;
+    if (minTemperature !== undefined) params.min_temperature = minTemperature;
+    if (minPressure !== undefined) params.min_pressure = minPressure;
+    if (minAltitude !== undefined) params.min_altitude = minAltitude;
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
 
     axios
-      .get<PhotoresistorData[]>("http://127.0.0.1:8000/photoresistor/", { params })
+      .get<SensorData[]>("http://127.0.0.1:8000/pressure/", { params })
       .then((response) => {
         const transformedData = response.data.map((item) => ({
           name: new Date(item.timestamp).toLocaleString(),
-          value: item.voltage,
+          temperature: item.temperature,
+          pressure: item.pressure,
+          altitude: item.altitude,
         }));
         setData(transformedData);
       })
@@ -45,10 +54,18 @@ export default function Dashboard() {
     fetchData();
   };
 
+  useEffect(() => {
+    fetchData(); // Fetch data on mount
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 10000); // Fetch data every 60 seconds
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, [skip, limit, minTemperature, minPressure, minAltitude]);
+
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-10 items-center">
       <MainNavbar />
-      <h1 className="font-bold text-3xl text-center mb-5">PhotoResistor</h1>
+      <h1 className="font-bold text-3xl text-center mb-5">Sensor Data</h1>
 
       {/* Full-screen container to split graph and form */}
       <div className="flex h-full w-full gap-10">
@@ -60,7 +77,7 @@ export default function Dashboard() {
           }}
         >
           <div style={{ width: "90%", height: "90%" }}>
-            <Chart data={data} />
+            <AreaChartComponent data={data} />
           </div>
         </div>
 
@@ -75,11 +92,8 @@ export default function Dashboard() {
             onSubmit={handleSubmit}
             className="flex flex-col gap-4"
             style={{
-              display: "flex", // Flex layout to arrange children
-              flexDirection: "column", // Arrange elements vertically
-              justifyContent: "space-between", // Distribute elements
-              width: "95%", // Full width of parent
-              height: "80%", // Full height of parent
+              width: "95%",
+              height: "80%",
             }}
           >
             <div>
@@ -88,7 +102,7 @@ export default function Dashboard() {
                 type="number"
                 value={skip}
                 onChange={(e) => setSkip(Number(e.target.value))}
-                placeholder="10"
+                placeholder="0"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
               />
             </div>
@@ -103,34 +117,58 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <label>Minimum Voltage:</label>
+              <label>Minimum Temperature:</label>
               <input
                 type="number"
-                value={minVoltage || ""}
+                value={minTemperature || ""}
                 onChange={(e) =>
-                  setMinVoltage(e.target.value ? Number(e.target.value) : undefined)
+                  setMinTemperature(e.target.value ? Number(e.target.value) : undefined)
                 }
                 placeholder="0"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
               />
             </div>
             <div>
-              <label>Start Date (format: YYYY-MM-DDTHH:MM:SS):</label>
+              <label>Minimum Pressure:</label>
               <input
-                type="text"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                placeholder="2024-11-13T23:27:52"
+                type="number"
+                value={minPressure || ""}
+                onChange={(e) =>
+                  setMinPressure(e.target.value ? Number(e.target.value) : undefined)
+                }
+                placeholder="0"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
               />
             </div>
             <div>
-              <label>End Date (format: YYYY-MM-DDTHH:MM:SS):</label>
+              <label>Minimum Altitude:</label>
+              <input
+                type="number"
+                value={minAltitude || ""}
+                onChange={(e) =>
+                  setMinAltitude(e.target.value ? Number(e.target.value) : undefined)
+                }
+                placeholder="0"
+                className="border rounded px-2 py-1 w-full bg-black text-white"
+              />
+            </div>
+            <div>
+              <label>Start Date:</label>
+              <input
+                type="text"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                placeholder="YYYY-MM-DDTHH:MM:SS"
+                className="border rounded px-2 py-1 w-full bg-black text-white"
+              />
+            </div>
+            <div>
+              <label>End Date:</label>
               <input
                 type="text"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                placeholder="2024-11-14T23:27:52"
+                placeholder="YYYY-MM-DDTHH:MM:SS"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
               />
             </div>
@@ -144,6 +182,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-
   );
 }

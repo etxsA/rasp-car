@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainNavbar from "@/components/MainNavbar";
-import Chart from "@/components/Chart";
+import AreaChartComponent from "@/components/LineChart";
 
-interface PhotoresistorData {
-  voltage: number;
-  lightLevel: number;
+interface DistanceData {
+  distance: number;
   timestamp: string;
   id: number;
 }
@@ -16,22 +15,22 @@ export default function Dashboard() {
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [minVoltage, setMinVoltage] = useState<number | undefined>();
+  const [minDistance, setMinDistance] = useState<number | undefined>();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const fetchData = () => {
     const params: any = { skip, limit };
-    if (minVoltage !== undefined) params.min_voltage = minVoltage;
+    if (minDistance !== undefined) params.min_distance = minDistance;
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
 
     axios
-      .get<PhotoresistorData[]>("http://127.0.0.1:8000/photoresistor/", { params })
+      .get<DistanceData[]>("http://127.0.0.1:8000/distance/", { params })
       .then((response) => {
         const transformedData = response.data.map((item) => ({
           name: new Date(item.timestamp).toLocaleString(),
-          value: item.voltage,
+          value: item.distance,
         }));
         setData(transformedData);
       })
@@ -45,14 +44,25 @@ export default function Dashboard() {
     fetchData();
   };
 
+  // Fetch data on component mount and set up periodic updates
+  useEffect(() => {
+    fetchData();
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 10000); // Fetch every 10 seconds
+
+    return () => clearInterval(intervalId);
+  }, [skip, limit, minDistance]); // Ensure filters are respected
+
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-10 items-center">
       <MainNavbar />
-      <h1 className="font-bold text-3xl text-center mb-5">PhotoResistor</h1>
+      <h1 className="font-bold text-3xl text-center mb-5">Distance</h1>
 
       {/* Full-screen container to split graph and form */}
       <div className="flex h-full w-full gap-10">
-        {/* Graph Section: 3/4 of the width */}
+        {/* Graph Section */}
         <div
           className="menu-box flex justify-center items-center w-3/4"
           style={{
@@ -60,11 +70,11 @@ export default function Dashboard() {
           }}
         >
           <div style={{ width: "90%", height: "90%" }}>
-            <Chart data={data} />
+            <AreaChartComponent data={data} />
           </div>
         </div>
 
-        {/* Form Section: 1/4 of the width */}
+        {/* Form Section */}
         <div
           className="menu-box flex justify-center items-center w-1/4"
           style={{
@@ -75,11 +85,11 @@ export default function Dashboard() {
             onSubmit={handleSubmit}
             className="flex flex-col gap-4"
             style={{
-              display: "flex", // Flex layout to arrange children
-              flexDirection: "column", // Arrange elements vertically
-              justifyContent: "space-between", // Distribute elements
-              width: "95%", // Full width of parent
-              height: "80%", // Full height of parent
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              width: "95%",
+              height: "80%",
             }}
           >
             <div>
@@ -103,12 +113,12 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <label>Minimum Voltage:</label>
+              <label>Minimum Distance:</label>
               <input
                 type="number"
-                value={minVoltage || ""}
+                value={minDistance || ""}
                 onChange={(e) =>
-                  setMinVoltage(e.target.value ? Number(e.target.value) : undefined)
+                  setMinDistance(e.target.value ? Number(e.target.value) : undefined)
                 }
                 placeholder="0"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
@@ -144,6 +154,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-
   );
 }

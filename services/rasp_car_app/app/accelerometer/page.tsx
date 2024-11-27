@@ -3,35 +3,43 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainNavbar from "@/components/MainNavbar";
-import Chart from "@/components/Chart";
+import ComposedChartComponent from  "@/components/Radar";
 
-interface PhotoresistorData {
-  voltage: number;
-  lightLevel: number;
+interface AccelerometerData {
+  x: number;
+  y: number;
+  z: number;
   timestamp: string;
   id: number;
 }
 
-export default function Dashboard() {
-  const [data, setData] = useState<{ name: string; value: number }[]>([]);
+export default function Accelerometer() {
+  const [data, setData] = useState<{ name: string; x: number; y: number; z: number }[]>([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [minVoltage, setMinVoltage] = useState<number | undefined>();
+  const [minX, setMinX] = useState<number | undefined>();
+  const [minY, setMinY] = useState<number | undefined>();
+  const [minZ, setMinZ] = useState<number | undefined>();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const fetchData = () => {
     const params: any = { skip, limit };
-    if (minVoltage !== undefined) params.min_voltage = minVoltage;
+    if (minX !== undefined) params.min_x = minX;
+    if (minY !== undefined) params.min_y = minY;
+    if (minZ !== undefined) params.min_z = minZ;
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
 
     axios
-      .get<PhotoresistorData[]>("http://127.0.0.1:8000/photoresistor/", { params })
+      .get<AccelerometerData[]>("http://127.0.0.1:8000/accelerometer/", { params })
       .then((response) => {
+        console.log(response.data); 
         const transformedData = response.data.map((item) => ({
           name: new Date(item.timestamp).toLocaleString(),
-          value: item.voltage,
+          x: item.x,
+          y: item.y,
+          z: item.z,
         }));
         setData(transformedData);
       })
@@ -45,42 +53,33 @@ export default function Dashboard() {
     fetchData();
   };
 
+  useEffect(() => {
+    fetchData();
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 10000); // Fetch every 20 seconds
+    return () => clearInterval(intervalId);
+  }, [skip, limit, minX, minY, minZ]);
+
   return (
     <div className="h-screen w-screen flex flex-col gap-5 py-5 px-10 items-center">
       <MainNavbar />
-      <h1 className="font-bold text-3xl text-center mb-5">PhotoResistor</h1>
+      <h1 className="font-bold text-3xl text-center mb-5">Accelerometer</h1>
 
-      {/* Full-screen container to split graph and form */}
       <div className="flex h-full w-full gap-10">
-        {/* Graph Section: 3/4 of the width */}
-        <div
-          className="menu-box flex justify-center items-center w-3/4"
-          style={{
-            padding: "20px",
-          }}
-        >
+        {/* Chart Section: 3/4 of the width */}
+        <div className="menu-box flex justify-center items-center w-3/4" style={{ padding: "20px" }}>
           <div style={{ width: "90%", height: "90%" }}>
-            <Chart data={data} />
+            <ComposedChartComponent data={data} />
           </div>
         </div>
 
         {/* Form Section: 1/4 of the width */}
-        <div
-          className="menu-box flex justify-center items-center w-1/4"
-          style={{
-            padding: "20px",
-          }}
-        >
+        <div className="menu-box flex justify-center items-center w-1/4" style={{ padding: "20px" }}>
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4"
-            style={{
-              display: "flex", // Flex layout to arrange children
-              flexDirection: "column", // Arrange elements vertically
-              justifyContent: "space-between", // Distribute elements
-              width: "95%", // Full width of parent
-              height: "80%", // Full height of parent
-            }}
+            style={{ width: "95%", height: "80%" }}
           >
             <div>
               <label className="block font-medium">Skip:</label>
@@ -103,19 +102,37 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <label>Minimum Voltage:</label>
+              <label>Minimum X:</label>
               <input
                 type="number"
-                value={minVoltage || ""}
-                onChange={(e) =>
-                  setMinVoltage(e.target.value ? Number(e.target.value) : undefined)
-                }
+                value={minX || ""}
+                onChange={(e) => setMinX(e.target.value ? Number(e.target.value) : undefined)}
                 placeholder="0"
                 className="border rounded px-2 py-1 w-full bg-black text-white"
               />
             </div>
             <div>
-              <label>Start Date (format: YYYY-MM-DDTHH:MM:SS):</label>
+              <label>Minimum Y:</label>
+              <input
+                type="number"
+                value={minY || ""}
+                onChange={(e) => setMinY(e.target.value ? Number(e.target.value) : undefined)}
+                placeholder="0"
+                className="border rounded px-2 py-1 w-full bg-black text-white"
+              />
+            </div>
+            <div>
+              <label>Minimum Z:</label>
+              <input
+                type="number"
+                value={minZ || ""}
+                onChange={(e) => setMinZ(e.target.value ? Number(e.target.value) : undefined)}
+                placeholder="0"
+                className="border rounded px-2 py-1 w-full bg-black text-white"
+              />
+            </div>
+            <div>
+              <label>Start Date:</label>
               <input
                 type="text"
                 value={startDate}
@@ -125,7 +142,7 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <label>End Date (format: YYYY-MM-DDTHH:MM:SS):</label>
+              <label>End Date:</label>
               <input
                 type="text"
                 value={endDate}
@@ -144,6 +161,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-
   );
 }
