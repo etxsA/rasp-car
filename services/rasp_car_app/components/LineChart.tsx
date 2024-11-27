@@ -6,6 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -29,7 +30,8 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ data }) => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey="value" stroke="#f50538" fill="#3d010e" />
+        <Legend />
+        <Area type="monotone" dataKey="value" stroke="#f50538" fill="#3d010e" name="Distance"/>
       </AreaChart>
     </ResponsiveContainer>
   );

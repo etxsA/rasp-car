@@ -29,20 +29,20 @@ const ComposedChartComponent: React.FC<ComposedChartProps> = ({ data }) => {
       >
         {/* Grid and Axes */}
         <CartesianGrid stroke="#f5f5f5" />
-        <XAxis dataKey="name" scale="band" />
+        <XAxis dataKey="name" scale="band" tick={false} />
         <YAxis />
         <Tooltip />
         <Legend />
 
         {/* Bars */}
-        <Bar dataKey="x" barSize={20} fill="#630015" name="X Axis" />
-        <Bar dataKey="y" barSize={20} fill="#b6042a" name="Y Axis" />
-        <Bar dataKey="z" barSize={20} fill="#f50538" name="Z Axis" />
+        <Bar dataKey="x" barSize={10} fill="#630015" />
+        <Bar dataKey="y" barSize={10} fill="#b6042a" />
+        <Bar dataKey="z" barSize={10} fill="#f50538" />
 
         {/* Lines */}
-        <Line type="monotone" dataKey="x" stroke="#630015" name="X Trend" />
-        <Line type="monotone" dataKey="y" stroke="#b6042a" name="Y Trend" />
-        <Line type="monotone" dataKey="z" stroke="#f50538" name="Z Trend" />
+        <Line type="monotone" stroke="#630015" />
+        <Line type="monotone" stroke="#b6042a" />
+        <Line type="monotone" stroke="#f50538" />
       </ComposedChart>
     </ResponsiveContainer>
   );

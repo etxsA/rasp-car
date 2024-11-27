@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainNavbar from "@/components/MainNavbar";
-import AreaChartComponent from "@/components/DoubleLineChart";
+import AreaChartComponent2 from "@/components/DoubleLineChart";
 
 interface SensorData {
   temperature: number;
@@ -77,7 +77,7 @@ export default function Dashboard() {
           }}
         >
           <div style={{ width: "90%", height: "90%" }}>
-            <AreaChartComponent data={data} />
+            <AreaChartComponent2 data={data} />
           </div>
         </div>
 

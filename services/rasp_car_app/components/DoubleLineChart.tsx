@@ -6,6 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -13,7 +14,7 @@ interface AreaChartProps {
   data: { name: string; temperature: number; pressure: number; altitude: number }[];
 }
 
-const AreaChartComponent: React.FC<AreaChartProps> = ({ data }) => {
+const AreaChartComponent2: React.FC<AreaChartProps> = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart
@@ -29,12 +30,13 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ data }) => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
+        <Legend />
         <Area
           type="monotone"
           dataKey="temperature"
           stackId="1"
-          stroke="#3d010e"
-          fill="#3d010e"
+          stroke="#630015"
+          fill="#630015"
         />
         <Area
           type="monotone"
@@ -55,4 +57,4 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ data }) => {
   );
 };
 
-export default AreaChartComponent;
+export default AreaChartComponent2;
