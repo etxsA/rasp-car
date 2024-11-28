@@ -26,7 +26,7 @@ class MqttController:
             "distanceSensor": f"{baseTopic}/distance"
         }
         # Setup MQTT client
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.client = mqtt.Client()
         self.on_message_fun = on_message_fun
         self.client.on_message = self.on_message_fun
         self.client.on_connect = MqttController.on_connect
