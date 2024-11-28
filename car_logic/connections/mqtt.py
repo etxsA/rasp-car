@@ -8,7 +8,7 @@ class MqttController:
         current context. 
     """
 
-    def __init__(self, broker: str, port: int, baseTopic: str) -> None:
+    def __init__(self, broker: str, port: int, baseTopic: str, on_message_fun) -> None:
         """Construct a simple mqqt client to publish messages to a broker
 
         Args:
@@ -28,7 +28,8 @@ class MqttController:
         # Setup MQTT client
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.client.subscribe(f"{self.baseTopic}/control")
-        self.client.connect(broker, port)
+        self.on_message_fun = on_message_fun
+        self.client.connect(broker, port, 60)
         self.client.loop_start()  # Start the loop to process network traffic
     
     def sendData(self, data: str, sensor: str):
@@ -56,6 +57,12 @@ class MqttController:
         else:
             print(f"Failed to send data to MQTT topic {self.topics[sensor]}")
             return result
+        
+    def on_message(self, client, userdata, msg):
+            payload = msg.payload.decode("utf-8")
+            print(f"Received message: {payload}")
+
+            self.on_message_fun(payload)
 
     def __del__(self):
         """Stop mqtt instance and disconnect

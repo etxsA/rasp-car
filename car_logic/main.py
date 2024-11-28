@@ -3,7 +3,7 @@ import threading
 import argparse
 import paho.mqtt.client as mqtt
 from . import setupControllers
-from .connections import APIController
+from .connections import APIController, MqttController
 
 def parse_args():
     """Parse command-line arguments using argparse."""
@@ -34,8 +34,6 @@ class Raspcar:
 
         # Initialize other components
         self.ultrasonic = self.sensors.distanceSensor  # Ultrasonic sensor from SensorController
-        self.mqtt_client = self.mqtt.client
-
         # Flag to control thread stopping
         self.stop_thread = False
 
@@ -55,10 +53,7 @@ class Raspcar:
 
     def connectMQTT(self):
 
-        def on_message(client, userdata, msg):
-            payload = msg.payload.decode("utf-8")
-            print(f"Received message: {payload}")
-
+        def on_message_fun(payload):
             # If message controls motors, process it here
             if payload == "STOP":
                 self.motors.stop()
@@ -68,11 +63,8 @@ class Raspcar:
                 self.motors.backward()
 
         # Set the MQTT client callback
-        self.mqtt_client.on_message = on_message
+        self.mqtt = MqttController(self.mqtt_broker, self.mqtt_port, self.base_topic, on_message_fun)
 
-        # Connect to the broker
-        self.mqtt_client.connect(self.mqtt_broker, self.mqtt_port)
-        self.mqtt_client.loop_start()
 
     def send_sensor_data(self):
         """Send sensor data concurrently but at different intervals."""
@@ -113,7 +105,7 @@ class Raspcar:
     def monitor_ultrasonic_interrupt(self):
         """Monitor ultrasonic distance and trigger interrupt if an obstacle is detected."""
         while not self.stop_thread:
-            distance = self.ultrasonic.measureDistance()
+            distance = self.ultrasonic.measureDistance()["distance "]
             print(f"Ultrasonic Distance: {distance} cm")
             if distance < 5:  # Interrupt condition
                 print("Obstacle detected! Stopping motors and backing up.")
@@ -139,7 +131,6 @@ class Raspcar:
     def stop(self):
         """Stop all threads and operations."""
         self.stop_thread = True
-        self.mqtt_client.disconnect()
         print("Raspcar stopped.")
 
 if __name__ == "__main__":
