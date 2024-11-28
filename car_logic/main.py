@@ -67,8 +67,7 @@ class Raspcar:
             elif payload == "BACKWARD":
                 self.motors.backward()
 
-        # Set the MQTT client callbacks
-        self.mqtt_client.on_connect = on_connect
+        # Set the MQTT client callback
         self.mqtt_client.on_message = on_message
 
         # Connect to the broker
