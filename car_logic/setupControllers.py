@@ -47,7 +47,10 @@ def setupControllers(baseUrl: str,
         else: 
             raise ConnectionError("Error fetching config from API, may be broken")
     else: 
-        mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
+        def printer(payload):
+            print("mqtt: " + payload)
+
+        mqttC = MqttController(mqttBroker, mqttPort, mqttTopic, printer)
 
     # URL Direct Conection
     if not dbURL:
