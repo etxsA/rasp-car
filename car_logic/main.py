@@ -66,6 +66,7 @@ class Raspcar:
         self.mqtt = MqttController(self.mqtt_broker, self.mqtt_port, self.base_topic, on_message_fun)
 
 
+        on_message_fun("Test On message Fun")
     def send_sensor_data(self):
         """Send sensor data concurrently but at different intervals."""
         def send_light_sensor_data():
