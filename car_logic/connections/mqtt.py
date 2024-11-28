@@ -68,7 +68,7 @@ class MqttController:
             print(f"Failed to connect, return code {rc}")
 
     # Callback function when a message is received
-    def on_message(client, userdata, msg):
+    def on_message(client, userdata, msg, extra):
         payload = msg.payload.decode("utf-8")
         print(f"Received message: {payload}")
         MqttController.printer(payload)
