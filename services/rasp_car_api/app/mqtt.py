@@ -22,6 +22,7 @@ sensorTopics = {
     "accelerometer": f"{baseTopic}/accelerometer",
     "environmentSensor": f"{baseTopic}/pressure",
     "distanceSensor": f"{baseTopic}/distance",
+    "control": f"{baseTopic}/control"
 }
 
 
@@ -61,6 +62,9 @@ def on_message(client, userdata, message):
         distance_data = schemas.DistanceCreate(**data)
         crud.create_distance(db, distance_data)
         print(f"MQTT:\t  OK Insertion {topic}")  
+
+    elif topic == sensorTopics["distanceSensor"]:
+        print(data)
 
     else:
         print("Unknown topic:", topic)
