@@ -74,28 +74,28 @@ class Raspcar:
                 light_data = self.sensors.readLightSensor()
                 print(f"Light Sensor Data: {light_data}")
                 self.mqtt.sendData(light_data, "lightSensor")
-                time.sleep(2)
+                time.sleep(10)
 
         def send_accelerometer_data():
             while not self.stop_thread:
                 accel_data = self.sensors.readAccelerometer()
                 print(f"Accelerometer Data: {accel_data}")
                 self.mqtt.sendData(accel_data, "accelerometer")
-                time.sleep(3)
+                time.sleep(13)
 
         def send_environment_sensor_data():
             while not self.stop_thread:
                 env_data = self.sensors.readEnvironmentSensor()
                 print(f"Environment Sensor Data: {env_data}")
                 self.mqtt.sendData(env_data, "environmentSensor")
-                time.sleep(4)
+                time.sleep(15)
 
         def send_distance_sensor_data():
             while not self.stop_thread:
                 dist_data = self.sensors.readDistanceSensor()
                 print(f"Distance Sensor Data: {dist_data}")
                 self.mqtt.sendData(dist_data, "distanceSensor")
-                time.sleep(5)
+                time.sleep(10)
 
         # Start the threads for each sensor
         threading.Thread(target=send_light_sensor_data, daemon=True).start()
