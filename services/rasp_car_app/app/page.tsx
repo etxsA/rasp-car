@@ -120,7 +120,7 @@ export default function Home() {
     <div className="h-screen w-screen flex flex-col flex-nowrap gap-5 py-5 px-40 justify-start items-center" >
       <MainNavbar />
       {/* Contenedor de las dos primeras gráficas */}
-      <div className="flex flex-row flex-wrap justify-center items-center gap-5 w-full min-h-[400px]">
+      <div className="flex flex-row flex-wrap justify-center items-center gap-5 w-full min-h-[400px] mb-5">
         <div className="w-80 h-80">
           <Chart data={dataPhotoresistor} />
         </div>

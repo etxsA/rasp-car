@@ -27,6 +27,7 @@ class MqttController:
         }
         # Setup MQTT client
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.client.subscribe(f"{self.baseTopic}/control")
         self.client.connect(broker, port)
         self.client.loop_start()  # Start the loop to process network traffic
     
