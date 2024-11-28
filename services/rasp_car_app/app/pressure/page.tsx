@@ -18,7 +18,7 @@ export default function Dashboard() {
     { name: string; temperature: number; pressure: number; altitude: number }[]
   >([]);
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [minTemperature, setMinTemperature] = useState<number | undefined>();
   const [minPressure, setMinPressure] = useState<number | undefined>();
   const [minAltitude, setMinAltitude] = useState<number | undefined>();

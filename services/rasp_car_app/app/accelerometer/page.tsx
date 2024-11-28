@@ -16,7 +16,7 @@ interface AccelerometerData {
 export default function Accelerometer() {
   const [data, setData] = useState<{ name: string; x: number; y: number; z: number }[]>([]);
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [minX, setMinX] = useState<number | undefined>();
   const [minY, setMinY] = useState<number | undefined>();
   const [minZ, setMinZ] = useState<number | undefined>();
@@ -35,8 +35,8 @@ export default function Accelerometer() {
       .get<AccelerometerData[]>("http://127.0.0.1:8000/accelerometer/", { params })
       .then((response) => {
         console.log(response.data); 
-        const transformedData = response.data.map((item) => ({
-          name: new Date(item.timestamp).toLocaleString(),
+        const transformedData = response.data.map((item, index) => ({
+          name: `${new Date(item.timestamp).toLocaleString()}_${index}`, //
           x: item.x,
           y: item.y,
           z: item.z,

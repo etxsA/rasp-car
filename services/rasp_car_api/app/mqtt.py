@@ -74,7 +74,7 @@ async def lifespan(app: FastAPI):
     # Start MQTT client
     client = mqtt.Client()
     client.on_message = on_message
-    client.connect(mqttBroker, mqttPort, 60)
+    client.connect(mqttBroker, mqttPort, 180)
 
     # Subscribe to sensor topics
     for topic in sensorTopics.values():
