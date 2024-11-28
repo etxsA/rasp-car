@@ -68,13 +68,16 @@ class MqttController:
             print(f"Failed to connect, return code {rc}")
 
     # Callback function when a message is received
-    def on_message(self,client, userdata, msg):
+    def on_message(client, userdata, msg):
         payload = msg.payload.decode("utf-8")
         print(f"Received message: {payload}")
-        self.on_message_fun(payload)
+        MqttController.printer(payload)
 
 
     def __del__(self):
         """Stop mqtt instance and disconnect
         """
         self.client.disconnect()  # Disconnect the MQTT client
+
+    def printer(payload):
+            print("mqtt: " + payload)
