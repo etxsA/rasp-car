@@ -27,10 +27,10 @@ class MqttController:
         }
         # Setup MQTT client
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-        self.client.subscribe(f"{self.baseTopic}/control")
         self.on_message_fun = on_message_fun
         self.client.on_message = self.on_message_fun
-        self.client.connect(broker, port, 60)
+        self.client.subscribe(f"{self.baseTopic}/control")
+        self.client.connect(broker, port, 100)
         self.client.loop_start()  # Start the loop to process network traffic
     
     def sendData(self, data: str, sensor: str):
