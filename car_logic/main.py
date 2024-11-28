@@ -30,7 +30,7 @@ class Raspcar:
         self.fetch_config()
 
         # Initialize controllers
-        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(self.baseUrl, self.mqtt_broker, self.mqtt_port, self.base_topic)
+        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(self.baseUrl, mqtt_broker, mqtt_port, base_topic)
 
         # Initialize other components
         self.ultrasonic = self.sensors.distanceSensor  # Ultrasonic sensor from SensorController
