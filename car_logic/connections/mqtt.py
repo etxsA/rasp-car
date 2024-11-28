@@ -26,13 +26,14 @@ class MqttController:
             "distanceSensor": f"{baseTopic}/distance"
         }
         # Setup MQTT client
-        self.client = mqtt.Client()
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.on_message_fun = on_message_fun
-        self.client.on_message = self.on_message
-        self.client.on_connect = MqttController.on_connect
+        self.client.on_message = self.on_message_fun
         self.client.connect(broker, port, 100)
-
-        self.client.loop_forever()  # Start the loop to process network traffic
+        self.client.subscribe(f"equipo3/control")
+        print(f"Subscribed to MQTT topic: {self.baseTopic}/control")
+        on_message_fun("Test, PAYLOAD INSERTION")
+        self.client.loop_start()  # Start the loop to process network traffic
     
     def sendData(self, data: str, sensor: str):
         """Publish data of a specific sensor to the broker
@@ -60,24 +61,14 @@ class MqttController:
             print(f"Failed to send data to MQTT topic {self.topics[sensor]}")
             return result
         
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Connected to HiveMQ broker")
-            client.subscribe("equipo3/control")  # Subscribe to the topic
-        else:
-            print(f"Failed to connect, return code {rc}")
+    def on_message(self, client, userdata, msg):
+            payload = msg.payload.decode("utf-8")
+            print(f"Received message: {payload}")
 
-    # Callback function when a message is received
-    def on_message(client, userdata, msg, extra):
-        payload = msg.payload.decode("utf-8")
-        print(f"Received message: {payload}")
-        MqttController.printer(payload)
-
+            self.on_message_fun(payload)
 
     def __del__(self):
         """Stop mqtt instance and disconnect
         """
+        self.client.loop_stop() 
         self.client.disconnect()  # Disconnect the MQTT client
-
-    def printer(payload):
-            print("mqtt: " + payload)
