@@ -3,6 +3,7 @@ import threading
 import argparse
 import paho.mqtt.client as mqtt
 from . import setupControllers
+from .connections import APIController
 
 def parse_args():
     """Parse command-line arguments using argparse."""
