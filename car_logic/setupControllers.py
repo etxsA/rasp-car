@@ -32,6 +32,8 @@ def setupControllers(baseUrl: str,
 
     motor = MovementController()
     sensors = SensorController()
+    def printer(payload):
+            print("mqtt: " + payload)
 
     # Check if the arguments where provided
     if not mqttBroker or not mqttPort or not mqttTopic:
@@ -43,13 +45,10 @@ def setupControllers(baseUrl: str,
 
         # Never Trust API, if not provided fail
         if mqttBroker and mqttPort and mqttTopic:
-            mqttC = MqttController(mqttBroker, mqttPort, mqttTopic)
+            mqttC = MqttController(mqttBroker, mqttPort, mqttTopic, printer)
         else: 
             raise ConnectionError("Error fetching config from API, may be broken")
     else: 
-        def printer(payload):
-            print("mqtt: " + payload)
-
         mqttC = MqttController(mqttBroker, mqttPort, mqttTopic, printer)
 
     # URL Direct Conection
