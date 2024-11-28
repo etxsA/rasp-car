@@ -25,7 +25,7 @@ const Chart: React.FC<ChartProps> = ({ data }) => (
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="value" stroke="#4BA228" />
+      <Line type="monotone" dataKey="value" stroke="#b6042a" name="voltage"/>
     </LineChart>
   </ResponsiveContainer>
 );
