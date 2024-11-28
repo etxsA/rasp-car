@@ -121,9 +121,9 @@ class Raspcar:
     def monitor_ultrasonic_interrupt(self):
         """Monitor ultrasonic distance and trigger interrupt if an obstacle is detected."""
         while not self.stop_thread:
-            distance = self.ultrasonic.get_distance()
+            distance = self.ultrasonic.measureDistance()
             print(f"Ultrasonic Distance: {distance} cm")
-            if distance < 10:  # Interrupt condition
+            if distance < 5:  # Interrupt condition
                 print("Obstacle detected! Stopping motors and backing up.")
                 self.motors.stop()
                 time.sleep(1)
