@@ -30,7 +30,7 @@ class MqttController:
         self.on_message_fun = on_message_fun
         self.client.on_message = self.on_message_fun
         self.client.connect(broker, port, 100)
-        self.client.subscribe(f"{self.baseTopic}/control")
+        self.client.subscribe(f"equipo3/control")
         print(f"Subscribed to MQTT topic: {self.baseTopic}/control")
         on_message_fun("Test, PAYLOAD INSERTION")
         self.client.loop_start()  # Start the loop to process network traffic
