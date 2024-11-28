@@ -29,7 +29,7 @@ class MqttController:
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.on_message_fun = on_message_fun
         self.client.on_message = self.on_message_fun
-        self.client.on_connect = self.on_connect
+        self.client.on_connect = MqttController.on_connect
         self.client.connect(broker, port, 100)
 
         self.client.loop_forever()  # Start the loop to process network traffic
@@ -60,7 +60,7 @@ class MqttController:
             print(f"Failed to send data to MQTT topic {self.topics[sensor]}")
             return result
         
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to HiveMQ broker")
             client.subscribe("equipo3/control")  # Subscribe to the topic
