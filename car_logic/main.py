@@ -3,7 +3,7 @@ import threading
 import argparse
 import paho.mqtt.client as mqtt
 from . import setupControllers
-from .connections import APIController
+from . import APIController
 
 def parse_args():
     """Parse command-line arguments using argparse."""
@@ -22,141 +22,130 @@ class Raspcar:
         """Initialize Raspcar, fetch configuration, and set up controllers."""
         self.baseUrl = baseUrl
         self.base_topic = base_topic
-        
-        # Initialize APIController to fetch config
+        self.stop_thread = False  # Initialize stop_thread attribute
         self.api = APIController(baseUrl)
-
+        
         # Fetch the configuration from the API
         self.fetch_config()
 
         # Initialize controllers
-        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(self.baseUrl, self.mqtt_broker, self.mqtt_port, self.base_topic)
+        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(baseUrl, mqtt_broker, mqtt_port, base_topic)
 
-        # Initialize other components
-        self.ultrasonic = self.sensors.distanceSensor  # Ultrasonic sensor from SensorController
-        self.mqtt_client = self.mqtt.client
+        # Initialize MQTT client
+        self.mqtt.client.on_connect = self.on_connect
+        self.mqtt.client.on_message = self.on_message
+        self.mqtt.client.connect(mqtt_broker, mqtt_port)
+        self.mqtt.client.loop_start()
 
-        # Connect to MQTT broker
-        self.connectMQTT()
-
-    def fetch_config(self):
-        """Fetch the configuration from the API."""
-        try:
-            # Fetch configuration from /config endpoint
-            config = self.api.getData("config")
-            
-            # Extract MQTT config if available
-            mqtt_config = config.get("mqtt", {})
-            self.mqtt_broker = mqtt_config.get("broker", "localhost")
-            self.mqtt_port = mqtt_config.get("port", 1883)
-            self.mqtt_topic = mqtt_config.get("topic", "raspcar")
-            
-            print(f"Config fetched from API: {config}")
-        except Exception as e:
-            print(f"Error fetching config from API: {e}")
-            # Use defaults if config fetch fails
-            self.mqtt_broker = "localhost"
-            self.mqtt_port = 1883
-            self.mqtt_topic = "raspcar"
-
-    def connectMQTT(self):
-        """Set up MQTT connection and subscription."""
-        self.mqtt_client.on_connect = self.on_connect
-        self.mqtt_client.on_message = self.on_message
-        self.mqtt_client.connect(self.mqtt_broker, self.mqtt_port)
-        self.mqtt_client.loop_start()
-
-        # Subscribe to motor control topic
-        self.mqtt_client.subscribe(f"{self.base_topic}/motorControl")
+        # Start threads for sensor data sending and ultrasonic interrupt
+        self.start_sensor_threads()
 
     def on_connect(self, client, userdata, flags, rc):
         """Handle MQTT connection."""
-        print(f"Connected to MQTT Broker with result code {rc}")
-        self.mqtt_client.subscribe(f"{self.base_topic}/motorControl")
+        print(f"Connected to MQTT broker with result code {rc}")
+        # Subscribe to the motor control topic
+        client.subscribe(f"{self.base_topic}/motor_control")
 
     def on_message(self, client, userdata, msg):
-        """Handle incoming MQTT messages."""
+        """Handle MQTT messages to control the motors."""
         message = msg.payload.decode()
-        print(f"Received message: {message}")
-        
-        if message == "FORWARD":
+        print(f"Received MQTT message: {message}")
+
+        # Control motors based on received message
+        if message == "forward":
             self.motors.foward()
-        elif message == "BACKWARD":
+        elif message == "backward":
             self.motors.backward()
-        elif message == "STOP":
+        elif message == "stop":
             self.motors.stop()
-        else:
-            print(f"Unknown message: {message}")
+        # Add more motor control conditions as needed
 
-    def send_sensor_data(self):
-        """Send sensor data concurrently at different time intervals."""
-        def send_light_data():
-            while not self.stop_thread:
-                light_data = self.sensors.readLightSensor()
-                print(f"Light Sensor Data: {light_data}")
-                self.mqtt.sendData(light_data, "lightSensor")
-                time.sleep(2)  # Send light sensor data every 2 seconds
+    def fetch_config(self):
+        """Fetch the configuration from the API."""
+        print("Fetching configuration from API...")
+        config = self.api.getData("config")
+        print("Configuration fetched:", config)
 
-        def send_accel_data():
-            while not self.stop_thread:
-                accel_data = self.sensors.readAccelerometer()
-                print(f"Accelerometer Data: {accel_data}")
-                self.mqtt.sendData(accel_data, "accelerometer")
-                time.sleep(3)  # Send accelerometer data every 3 seconds
+    def start_sensor_threads(self):
+        """Start separate threads for each sensor to send data at different intervals."""
+        # Start thread for each sensor
+        threading.Thread(target=self.send_light_sensor_data, daemon=True).start()
+        threading.Thread(target=self.send_accelerometer_data, daemon=True).start()
+        threading.Thread(target=self.send_environment_sensor_data, daemon=True).start()
+        threading.Thread(target=self.send_distance_sensor_data, daemon=True).start()
+        threading.Thread(target=self.ultrasonic_interrupt, daemon=True).start()
 
-        def send_env_data():
-            while not self.stop_thread:
-                env_data = self.sensors.readEnvironmentSensor()
-                print(f"Environment Sensor Data: {env_data}")
-                self.mqtt.sendData(env_data, "environmentSensor")
-                time.sleep(5)  # Send environment sensor data every 5 seconds
-
-        def send_distance_data():
-            while not self.stop_thread:
-                dist_data = self.sensors.readDistanceSensor()
-                print(f"Distance Sensor Data: {dist_data}")
-                self.mqtt.sendData(dist_data, "distanceSensor")
-                time.sleep(1)  # Send distance sensor data every 1 second
-
-        # Start the threads for each sensor data
-        threading.Thread(target=send_light_data, daemon=True).start()
-        threading.Thread(target=send_accel_data, daemon=True).start()
-        threading.Thread(target=send_env_data, daemon=True).start()
-        threading.Thread(target=send_distance_data, daemon=True).start()
-
-    def handle_ultrasonic_interrupt(self):
-        """Check the ultrasonic sensor and stop the motors if an obstacle is too close."""
+    def send_light_sensor_data(self):
+        """Send light sensor data at intervals."""
         while not self.stop_thread:
-            distance = self.ultrasonic.readData()
-            print(f"Distance from obstacle: {distance} cm")
-            if distance < 10:  # If object is closer than 10 cm
-                print("Object too close, stopping motors and backing up.")
+            light_data = self.sensors.readLightSensor()
+            print(f"Light Sensor Data: {light_data}")
+            self.mqtt.sendData(light_data, "lightSensor")
+            time.sleep(2)  # Adjust the interval as needed
+
+    def send_accelerometer_data(self):
+        """Send accelerometer data at intervals."""
+        while not self.stop_thread:
+            accel_data = self.sensors.readAccelerometer()
+            print(f"Accelerometer Data: {accel_data}")
+            self.mqtt.sendData(accel_data, "accelerometer")
+            time.sleep(3)  # Adjust the interval as needed
+
+    def send_environment_sensor_data(self):
+        """Send environment sensor data at intervals."""
+        while not self.stop_thread:
+            env_data = self.sensors.readEnvironmentSensor()
+            print(f"Environment Sensor Data: {env_data}")
+            self.mqtt.sendData(env_data, "environmentSensor")
+            time.sleep(5)  # Adjust the interval as needed
+
+    def send_distance_sensor_data(self):
+        """Send distance sensor data at intervals."""
+        while not self.stop_thread:
+            dist_data = self.sensors.readDistanceSensor()
+            print(f"Distance Sensor Data: {dist_data}")
+            self.mqtt.sendData(dist_data, "distanceSensor")
+            time.sleep(4)  # Adjust the interval as needed
+
+    def ultrasonic_interrupt(self):
+        """Monitor ultrasonic sensor and trigger interrupt if too close."""
+        while not self.stop_thread:
+            distance = self.sensors.readDistanceSensor()
+            print(f"Ultrasonic Distance: {distance} cm")
+            
+            if distance < 10:  # Threshold for interruption
+                print("Object detected too close! Stopping motors and backing up.")
                 self.motors.stop()
+                time.sleep(1)
                 self.motors.backward()
                 time.sleep(2)  # Back up for 2 seconds
                 self.motors.stop()
-            time.sleep(0.1)  # Check every 100ms
+                time.sleep(1)  # Wait for a bit before resuming
+            time.sleep(0.5)  # Check the distance every 0.5 seconds
 
     def run(self):
-        """Start the program's main loop."""
+        """Run the Raspcar logic."""
         try:
-            # Start the ultrasonic interrupt handling in a separate thread
-            threading.Thread(target=self.handle_ultrasonic_interrupt, daemon=True).start()
-
-            # Start sending sensor data concurrently
-            self.send_sensor_data()
-
-            # Keep the program running
-            while True:
+            while not self.stop_thread:
                 time.sleep(1)
-
         except KeyboardInterrupt:
-            print("Shutting down...")
+            print("Stopping Raspcar...")
             self.stop_thread = True
-            self.mqtt_client.loop_stop()
-            self.mqtt_client.disconnect()
+            self.mqtt.client.disconnect()
+            self.mqtt.client.loop_stop()
+            print("Raspcar stopped.")
 
+# Main entry point
 if __name__ == "__main__":
     args = parse_args()
-    raspcar = Raspcar(baseUrl=args.baseUrl, mqtt_broker=args.mqttBroker, mqtt_port=args.mqttPort, base_topic=args.baseTopic)
+
+    # Initialize Raspcar with parsed arguments
+    raspcar = Raspcar(
+        baseUrl=args.baseUrl,
+        mqtt_broker=args.mqttBroker,
+        mqtt_port=args.mqttPort,
+        base_topic=args.baseTopic
+    )
+
+    # Start Raspcar
     raspcar.run()
