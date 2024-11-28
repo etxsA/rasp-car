@@ -54,13 +54,6 @@ class Raspcar:
             self.base_topic = mqtt_config.get("topic", "raspcar")
 
     def connectMQTT(self):
-        """Connect to the MQTT broker and subscribe to relevant topics."""
-        def on_connect(client, userdata, flags, rc, *extra):
-            if rc == 0:
-                print(f"Connected to MQTT broker {self.mqtt_broker} on port {self.mqtt_port}")
-                client.subscribe(f"{self.base_topic}/control")
-            else:
-                print(f"Failed to connect, return code {rc}")
 
         def on_message(client, userdata, msg):
             payload = msg.payload.decode("utf-8")
