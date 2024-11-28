@@ -28,7 +28,7 @@ class MqttController:
         # Setup MQTT client
         self.client = mqtt.Client()
         self.on_message_fun = on_message_fun
-        self.client.on_message = self.on_message_fun
+        self.client.on_message = self.on_message
         self.client.on_connect = MqttController.on_connect
         self.client.connect(broker, port, 100)
 
