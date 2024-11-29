@@ -3,7 +3,7 @@ import threading
 import argparse
 import paho.mqtt.client as mqtt
 from . import setupControllers
-from .connections import APIController
+from .connections import APIController, MqttController
 
 def parse_args():
     """Parse command-line arguments using argparse."""
@@ -30,12 +30,10 @@ class Raspcar:
         self.fetch_config()
 
         # Initialize controllers
-        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(self.baseUrl, self.mqtt_broker, self.mqtt_port, self.base_topic)
+        self.motors, self.sensors, self.api, self.mqtt, self.db = setupControllers(self.baseUrl, mqtt_broker, mqtt_port, base_topic)
 
         # Initialize other components
         self.ultrasonic = self.sensors.distanceSensor  # Ultrasonic sensor from SensorController
-        self.mqtt_client = self.mqtt.client
-
         # Flag to control thread stopping
         self.stop_thread = False
 
@@ -55,10 +53,7 @@ class Raspcar:
 
     def connectMQTT(self):
 
-        def on_message(client, userdata, msg):
-            payload = msg.payload.decode("utf-8")
-            print(f"Received message: {payload}")
-
+        def on_message_fun(payload):
             # If message controls motors, process it here
             if payload == "STOP":
                 self.motors.stop()
@@ -68,12 +63,10 @@ class Raspcar:
                 self.motors.backward()
 
         # Set the MQTT client callback
-        self.mqtt_client.on_message = on_message
+        self.mqtt = MqttController(self.mqtt_broker, self.mqtt_port, self.base_topic, on_message_fun)
 
-        # Connect to the broker
-        self.mqtt_client.connect(self.mqtt_broker, self.mqtt_port)
-        self.mqtt_client.loop_start()
 
+        on_message_fun("Test On message Fun")
     def send_sensor_data(self):
         """Send sensor data concurrently but at different intervals."""
         def send_light_sensor_data():
@@ -81,28 +74,28 @@ class Raspcar:
                 light_data = self.sensors.readLightSensor()
                 print(f"Light Sensor Data: {light_data}")
                 self.mqtt.sendData(light_data, "lightSensor")
-                time.sleep(2)
+                time.sleep(10)
 
         def send_accelerometer_data():
             while not self.stop_thread:
                 accel_data = self.sensors.readAccelerometer()
                 print(f"Accelerometer Data: {accel_data}")
                 self.mqtt.sendData(accel_data, "accelerometer")
-                time.sleep(3)
+                time.sleep(13)
 
         def send_environment_sensor_data():
             while not self.stop_thread:
                 env_data = self.sensors.readEnvironmentSensor()
                 print(f"Environment Sensor Data: {env_data}")
                 self.mqtt.sendData(env_data, "environmentSensor")
-                time.sleep(4)
+                time.sleep(15)
 
         def send_distance_sensor_data():
             while not self.stop_thread:
                 dist_data = self.sensors.readDistanceSensor()
                 print(f"Distance Sensor Data: {dist_data}")
                 self.mqtt.sendData(dist_data, "distanceSensor")
-                time.sleep(5)
+                time.sleep(10)
 
         # Start the threads for each sensor
         threading.Thread(target=send_light_sensor_data, daemon=True).start()
@@ -113,7 +106,7 @@ class Raspcar:
     def monitor_ultrasonic_interrupt(self):
         """Monitor ultrasonic distance and trigger interrupt if an obstacle is detected."""
         while not self.stop_thread:
-            distance = self.ultrasonic.measureDistance()
+            distance = self.ultrasonic.measureDistance()["distance"]
             print(f"Ultrasonic Distance: {distance} cm")
             if distance < 5:  # Interrupt condition
                 print("Obstacle detected! Stopping motors and backing up.")
@@ -139,7 +132,6 @@ class Raspcar:
     def stop(self):
         """Stop all threads and operations."""
         self.stop_thread = True
-        self.mqtt_client.disconnect()
         print("Raspcar stopped.")
 
 if __name__ == "__main__":
