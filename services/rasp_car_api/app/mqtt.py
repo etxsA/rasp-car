@@ -22,6 +22,7 @@ sensorTopics = {
     "accelerometer": f"{baseTopic}/accelerometer",
     "environmentSensor": f"{baseTopic}/pressure",
     "distanceSensor": f"{baseTopic}/distance",
+    "control": f"{baseTopic}/control"
 }
 
 
@@ -62,6 +63,9 @@ def on_message(client, userdata, message):
         crud.create_distance(db, distance_data)
         print(f"MQTT:\t  OK Insertion {topic}")  
 
+    elif topic == sensorTopics["distanceSensor"]:
+        print(data)
+
     else:
         print("Unknown topic:", topic)
     # Close the database session
@@ -74,7 +78,7 @@ async def lifespan(app: FastAPI):
     # Start MQTT client
     client = mqtt.Client()
     client.on_message = on_message
-    client.connect(mqttBroker, mqttPort, 60)
+    client.connect(mqttBroker, mqttPort, 180)
 
     # Subscribe to sensor topics
     for topic in sensorTopics.values():

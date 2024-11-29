@@ -46,3 +46,97 @@ To see details and see separate versions for [**sensors**](/car_logic/sensors/RE
       All code for services that don't run in the car, sucha as API/MQTT server, React Server and a MySQL Database.
   - [**`📂 Utils/`**:](/utils)
       Helper scripts that are not strictly needed for the project to work, but handy when developing it. Telegram Ip Sender Bot. 
+
+
+# **Project Progress and Daily Scrum Meetings**
+
+This document provides an overview of the initial project plan and a comparison with progress made during Daily Scrum meetings. It highlights key milestones, challenges, and adjustments to ensure successful project completion.
+
+---
+
+## **Initial Planning**
+
+The following tasks were outlined as part of the initial project schedule:
+
+1. Connect challenge sensors.  
+2. Connect challenge actuators.  
+3. Build a sensor-actuator circuit.  
+4. Design a database for the challenge.  
+5. Create the database.  
+6. Verify the database.  
+7. Create a Web API.  
+8. Verify Web API functionality.  
+9. Connect Node MCU to the database.  
+10. Integrate the system and conduct initial tests.  
+11. Manage information transfer.  
+12. Start data visualization.  
+13. Visualize key indicators.  
+14. Continue system testing.
+
+---
+
+## **Progress Made During Daily Scrum Meetings**
+
+| **Initial Phase**                              | **Daily Scrum Meetings**                                | **Comments/Observations**                                                                |
+|------------------------------------------------|---------------------------------------------------------|------------------------------------------------------------------------------------------|
+| **1. Connect challenge sensors**               | Daily 1: Connecting sensors                             | Completed as planned. Minor issues with sensor configuration were resolved.              |
+| **2. Connect challenge actuators**             | Daily 2: Connecting actuators                           | Completed on time, though control code adjustments were needed.                          |
+| **3. Build sensor-actuator circuit**           | Daily 3: Sensor-actuator circuit assembly               | Completed, but calibration issues with sensors were addressed.                           |
+| **4. Database design for the challenge**       | Daily 4: Database design                                | Successfully completed, achieving a functional structure for required data.              |
+| **5. Database creation**                       | Daily 5: Database creation                              | Implementation was successful, though relationship errors required corrections.          |
+| **6. Database verification**                   | Daily 6: Database verification                          | Validation completed, with query-related issues resolved.                                |
+| **7. Web API creation**                        | Daily 7: Web API development                            | Initial implementation completed; endpoints adjusted to meet functional needs.           |
+| **8. Verify Web API functionality**            | Daily 8: Web API testing                                | Functional validation succeeded, resolving performance-related issues.                   |
+| **9. Connect Node MCU to Database**            | Daily 9: Node MCU and database integration              | Achieved basic communication, with minor response time issues resolved.                  |
+| **10. System integration with initial tests**  | Daily 10: Initial system testing                        | Functional integration completed, addressing specific flow-related issues.               |
+| **11. Manage information transfer**            | Daily 11: Managing data transfer                        | Implementation completed; resolved some data loss issues during testing.                 |
+| **12. Start data visualization**               | Daily 12: Initial data visualization                    | Functional prototype created; adjustments needed for UI design improvements.             |
+| **13. Visualize key indicators**               | Daily 13: Indicator visualization                       | Basic indicators completed; resolved issues with real-time data updates.                 |
+| **14. Continue system testing**                | Daily 14: Final system testing                          | Significant progress made; critical errors resolved and system optimized.                |
+
+---
+
+## **Analysis and Observations**
+
+1. **Schedule Compliance:**  
+   The project progressed mostly in line with the initial schedule. Priorities were met while adapting to technical challenges.  
+
+2. **Necessary Adjustments:**  
+   - Some phases required additional time (e.g., Web API testing and Node MCU integration).  
+   - Technical issues were addressed without major delays to the overall timeline.  
+
+3. **Key Achievements:**  
+   - Daily Scrum meetings helped identify and resolve specific issues promptly.  
+   - Team collaboration ensured the successful completion of critical tasks, including system integration and final testing.
+
+---
+
+## **Next Steps**
+
+- Continue monitoring system performance for real-world scenarios.  
+- Refine user interface for better data visualization.  
+- Conduct stress tests to ensure scalability and reliability.
+
+
+## Evidence of the car in operation:
+https://youtu.be/jGDrGZ_NNSE
+
+
+## Conclusions
+
+Christian Damar:Throughout this project, I expanded my knowledge of IoT systems, particularly in managing communication between hardware and software components. My primary focus was on integrating sensor data with the Raspberry Pi and ensuring accurate data collection and transmission. The most challenging aspect for me was troubleshooting hardware-related issues and establishing seamless communication protocols. However, through persistence and hands-on experimentation, I was able to improve my understanding of these systems.
+This project taught me the importance of teamwork and adaptability when working with both hardware and software. It was rewarding to see how all the components came together to create a functional IoT solution, and I feel more confident tackling similar challenges in future projects.
+
+Emiliano López: This project was a valuable opportunity to dive deeper into the IoT field, particularly in designing and programming hardware components. My main contributions were focused on configuring and calibrating sensors, as well as ensuring their data was accurately processed and displayed. The most difficult part was understanding the interaction between the hardware and the Raspberry Pi, especially when trying to optimize the sensor performance for real-time data visualization.
+Overall, I found it incredibly satisfying to work on a project that combined both hardware and software integration. This experience helped me develop a strong foundation in IoT systems and encouraged me to explore new ways of bridging theoretical knowledge with practical applications.
+
+David Bernabé: Throughout this project, I have learned a lot of new things related to the IoT field. My main focus was building and coding the website, including both the backend and frontend. The most difficult part for me was learning new coding approaches and technologies such as React, ORMs, server connections, and methods. Despite all the challenges, I loved coding the page because it helped me gain valuable knowledge about web development.
+Finally, I think the most important part of this project for me was overcoming the fear of programming with new technologies and languages. Step by step, I got closer to my goals while learning along the way. I loved coding everything, even though I started without knowing much at all.
+
+
+Luis Canales: During the development of this project, I learned a lot about electronic sensors and actuators, how they work, and how to implement them. I also gained knowledge about the functions of a Raspberry Pi and how to work with it as a microcomputer. Additionally, I learned how to design and use databases in SQL, create a web page to display charts, program the sensors, and use MQTT to transform this device into a real IoT solution.
+The theoretical knowledge I acquired was very useful for constructing both the software and hardware components. More importantly, it helped me integrate everything into a complex IoT project that could be highly beneficial for various research cases. I hope to continue working on projects like this, as they not only teach me a great deal of technical knowledge but also how to effectively integrate it into robotics.
+
+
+
+

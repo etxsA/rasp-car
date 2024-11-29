@@ -14,7 +14,7 @@ interface DistanceData {
 export default function Dashboard() {
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [minDistance, setMinDistance] = useState<number | undefined>();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");

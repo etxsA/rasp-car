@@ -39,5 +39,5 @@ pip3 install -r requirements.txt
 To run the API simply use uvicorn as follows: 
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
