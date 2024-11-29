@@ -125,8 +125,12 @@ https://youtu.be/jGDrGZ_NNSE
 ## Conclusions
 
 Christian Damar:
+
 Emiliano López:
-David Bernabé:
+
+David Bernabé: Along all this project, i have learned a lot of new things related to the IOT field; on my side i focused on building and coding the website, including the backend and frontend 
+
+
 Luis Canales: During the development of this project, I learned a lot about electronic sensors and actuators, how they work, and how to implement them. I also gained knowledge about the functions of a Raspberry Pi and how to work with it as a microcomputer. Additionally, I learned how to design and use databases in SQL, create a web page to display charts, program the sensors, and use MQTT to transform this device into a real IoT solution.
 The theoretical knowledge I acquired was very useful for constructing both the software and hardware components. More importantly, it helped me integrate everything into a complex IoT project that could be highly beneficial for various research cases. I hope to continue working on projects like this, as they not only teach me a great deal of technical knowledge but also how to effectively integrate it into robotics.
 
