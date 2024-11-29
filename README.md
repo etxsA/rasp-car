@@ -124,11 +124,14 @@ https://youtu.be/jGDrGZ_NNSE
 
 ## Conclusions
 
-Christian Damar:
+Christian Damar:Throughout this project, I expanded my knowledge of IoT systems, particularly in managing communication between hardware and software components. My primary focus was on integrating sensor data with the Raspberry Pi and ensuring accurate data collection and transmission. The most challenging aspect for me was troubleshooting hardware-related issues and establishing seamless communication protocols. However, through persistence and hands-on experimentation, I was able to improve my understanding of these systems.
+This project taught me the importance of teamwork and adaptability when working with both hardware and software. It was rewarding to see how all the components came together to create a functional IoT solution, and I feel more confident tackling similar challenges in future projects.
 
-Emiliano López:
+Emiliano López: This project was a valuable opportunity to dive deeper into the IoT field, particularly in designing and programming hardware components. My main contributions were focused on configuring and calibrating sensors, as well as ensuring their data was accurately processed and displayed. The most difficult part was understanding the interaction between the hardware and the Raspberry Pi, especially when trying to optimize the sensor performance for real-time data visualization.
+Overall, I found it incredibly satisfying to work on a project that combined both hardware and software integration. This experience helped me develop a strong foundation in IoT systems and encouraged me to explore new ways of bridging theoretical knowledge with practical applications.
 
-David Bernabé: Along all this project, i have learned a lot of new things related to the IOT field; on my side i focused on building and coding the website, including the backend and frontend 
+David Bernabé: Throughout this project, I have learned a lot of new things related to the IoT field. My main focus was building and coding the website, including both the backend and frontend. The most difficult part for me was learning new coding approaches and technologies such as React, ORMs, server connections, and methods. Despite all the challenges, I loved coding the page because it helped me gain valuable knowledge about web development.
+Finally, I think the most important part of this project for me was overcoming the fear of programming with new technologies and languages. Step by step, I got closer to my goals while learning along the way. I loved coding everything, even though I started without knowing much at all.
 
 
 Luis Canales: During the development of this project, I learned a lot about electronic sensors and actuators, how they work, and how to implement them. I also gained knowledge about the functions of a Raspberry Pi and how to work with it as a microcomputer. Additionally, I learned how to design and use databases in SQL, create a web page to display charts, program the sensors, and use MQTT to transform this device into a real IoT solution.
